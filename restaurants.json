@@ -1,5 +1,5 @@
 {
-  "_comment": "Indické a indicko-nepálské restaurace v Brně. Adresy a fakta ověřené přes Firmy.cz, weby podniků a recenze (červen 2026). 'attrs' = filtrovatelné facety (viz indiani/facets.py): ayce, lunch, delivery. 'rating' = Google hodnocení. 'price' = konkrétní cena (např. bufet), volně textové; necháno prázdné, kde ji neznáme. Souřadnice se cachují v results/coords.json.",
+  "_comment": "Indické a indicko-nepálské restaurace v Brně. Adresy a fakta ověřené přes Firmy.cz, weby podniků a recenze (červen 2026). 'attrs' = filtrovatelné facety (viz indiani/facets.py): ayce, lunch, delivery. 'rating' = přibližné Google hodnocení (ručně udržované, null = neověřeno). 'price' = konkrétní cena bufetu (jen u AYCE). Souřadnice se cachují v results/coords.json.",
   "restaurants": [
     {
       "name": "Padagali",
@@ -26,6 +26,7 @@
       "address": "Heršpická 781/7, 639 00 Brno",
       "url": "https://www.indian-restaurant-b2.cz/",
       "tags": ["indická", "nepálská"],
+      "rating": 4.5,
       "attrs": ["ayce"],
       "price": "Bufet 192 Kč",
       "note": "Pobočka Buddhy ve Štýřicích, bufet all you can eat."
@@ -45,6 +46,7 @@
       "address": "Veveří 52/21, 602 00 Brno",
       "url": "https://www.indian-restaurant-siddhartha.cz/",
       "tags": ["indická", "nepálská"],
+      "rating": 4.1,
       "attrs": [],
       "price": "",
       "note": "Indicko-nepálské menu na Veveří."
@@ -64,6 +66,7 @@
       "address": "Jiráskova 248/48, 602 00 Brno",
       "url": "https://nepalbrno.cz/",
       "tags": ["nepálská", "indická", "kari"],
+      "rating": 4.5,
       "attrs": [],
       "price": "",
       "note": "Autentická nepálská a indická kuchyně poblíž Veveří."
@@ -73,6 +76,7 @@
       "address": "Tyršova 1822/2, 612 00 Brno",
       "url": "https://nepalbrno.cz/",
       "tags": ["nepálská", "indická"],
+      "rating": 4.5,
       "attrs": ["delivery"],
       "price": "",
       "note": "Pobočka v Králově Poli, rozvoz přes foodoru."
@@ -82,6 +86,7 @@
       "address": "třída Kpt. Jaroše 13, 602 00 Brno",
       "url": "https://www.indiathali.cz/",
       "tags": ["indická", "nepálská", "thali"],
+      "rating": 4.5,
       "attrs": ["ayce", "lunch"],
       "price": "",
       "note": "Thali a indicko-nepálské speciality v Černých Polích, obědový bufet all you can eat."
@@ -91,6 +96,7 @@
       "address": "třída Kpt. Jaroše 1929/10, 602 00 Brno",
       "url": "https://www.gopal.menu/",
       "tags": ["indická", "vegetariánské"],
+      "rating": null,
       "attrs": [],
       "price": "",
       "note": "Indická a nepálská kuchyně v Černých Polích."
@@ -100,6 +106,7 @@
       "address": "Nádražní 506/8, 602 00 Brno",
       "url": "https://himalayarestaurace.cz/",
       "tags": ["indická", "nepálská"],
+      "rating": null,
       "attrs": ["delivery"],
       "price": "",
       "note": "Indicko-nepálská restaurace u nádraží, rozvoz jídla."
@@ -119,6 +126,7 @@
       "address": "Starobrněnská 287/9, 602 00 Brno",
       "url": "",
       "tags": ["indická"],
+      "rating": 4.5,
       "attrs": [],
       "price": "",
       "note": "Indická kuchyně v historickém centru."
@@ -128,6 +136,7 @@
       "address": "Zelný trh 250/14, 602 00 Brno",
       "url": "https://drindy.cz/cs/",
       "tags": ["indická", "kari", "street food"],
+      "rating": 4.4,
       "attrs": ["ayce", "lunch"],
       "price": "Bufet 139 Kč",
       "note": "Indické bistro na Zelném trhu, obědový bufet all you can eat (Po-Pá)."
@@ -137,6 +146,7 @@
       "address": "Netroufalky 770/14, 625 00 Brno",
       "url": "",
       "tags": ["indická", "thali"],
+      "rating": null,
       "attrs": [],
       "price": "",
       "note": "Indická kuchyně v Bohunicích u kampusu."
@@ -146,6 +156,7 @@
       "address": "Řeznická 367/1, 602 00 Brno",
       "url": "https://sargamrestaurace.cz/",
       "tags": ["nepálská", "indická"],
+      "rating": 4.5,
       "attrs": ["ayce", "delivery"],
       "price": "Bufet 175 Kč",
       "note": "Nepálská a indická kuchyně v Trnité, bufet all you can eat."
@@ -155,6 +166,7 @@
       "address": "Křenová 164/49, 602 00 Brno",
       "url": "https://sargamrestaurace.cz/",
       "tags": ["nepálská", "indická"],
+      "rating": 4.5,
       "attrs": ["ayce", "delivery"],
       "price": "Bufet 175 Kč",
       "note": "Druhá pobočka Sargamu na Křenové, rovněž bufet all you can eat."
@@ -164,6 +176,7 @@
       "address": "Lidická 2006/26, 602 00 Brno",
       "url": "https://www.mount-everest.cz/golden-nepal/",
       "tags": ["nepálská", "indická"],
+      "rating": 4.4,
       "attrs": ["delivery"],
       "price": "",
       "note": "Nepálská a indická restaurace, rozvoz přes Wolt."
@@ -173,6 +186,7 @@
       "address": "Marešova 306/16, 602 00 Brno",
       "url": "",
       "tags": ["indická", "dhaba", "street food"],
+      "rating": null,
       "attrs": [],
       "price": "",
       "note": "Indický street food ve stylu dhaba."
@@ -182,6 +196,7 @@
       "address": "Panská 391/12, 602 00 Brno",
       "url": "https://dhababeas.cz/",
       "tags": ["bufet", "indická", "asijská", "vegetariánská"],
+      "rating": 4.3,
       "attrs": [],
       "price": "Podle váhy",
       "note": "Vegetariánský a veganský samoobslužný bufet, váží se na váhu."
@@ -191,6 +206,7 @@
       "address": "Běhounská 12/14, 602 00 Brno",
       "url": "http://www.restauracevbrne.net/flavours/",
       "tags": ["indická", "tandoori"],
+      "rating": null,
       "attrs": [],
       "price": "",
       "note": "Indická restaurace v centru kousek od náměstí Svobody."
@@ -200,6 +216,7 @@
       "address": "Smetanova 341/3, 602 00 Brno",
       "url": "",
       "tags": ["indická"],
+      "rating": 4.5,
       "attrs": [],
       "price": "",
       "note": "Druhá pobočka Namaskaru na Smetanově."
@@ -209,6 +226,7 @@
       "address": "U Dálnice 777, 664 42 Modřice",
       "url": "",
       "tags": ["indická"],
+      "rating": null,
       "attrs": [],
       "price": "",
       "note": "Indická kuchyně v Modřicích (Brno-venkov)."
@@ -218,6 +236,7 @@
       "address": "Husova 355/13, 602 00 Brno",
       "url": "",
       "tags": ["nepálská", "indická"],
+      "rating": 4.5,
       "attrs": [],
       "price": "",
       "note": "Nepálská a indická kuchyně v centru."
@@ -225,8 +244,9 @@
     {
       "name": "Royal Nepal",
       "address": "Svatopluka Čecha 1620/81, 612 00 Brno",
-      "url": "",
+      "url": "https://www.royalnepal.cz/",
       "tags": ["nepálská", "indická"],
+      "rating": 4.3,
       "attrs": [],
       "price": "",
       "note": "Nepálská a indická restaurace v Králově Poli."

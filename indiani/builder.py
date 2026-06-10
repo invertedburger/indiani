@@ -23,6 +23,9 @@ def build():
 
     restaurants = geocode(restaurants)
 
+    # Default order: best rated first; unrated (null) fall to the bottom.
+    restaurants.sort(key=lambda r: r.get('rating') or 0, reverse=True)
+
     timestamp = datetime.now().strftime('%d.%m.%Y %H:%M')
     html = index_page.generate(restaurants, timestamp)
     index_path = os.path.join(RESULTS_DIR, 'index.html')

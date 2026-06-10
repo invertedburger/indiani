@@ -54,14 +54,16 @@ def _card(r, i):
         )
 
     maps_q = quote_plus(f'{name} {address}')
+    btn = ('flex-1 inline-flex items-center justify-center gap-1.5 px-3 py-2 '
+           'rounded-xl text-sm font-semibold transition-colors')
     links = (
         f'<a href="https://www.google.com/maps/search/?api=1&query={maps_q}" target="_blank" rel="noopener" '
-        f'class="text-xs font-medium text-saffron hover:text-masala dark:text-gold dark:hover:text-orange-300">📍 Mapy</a>'
+        f'class="{btn} bg-saffron text-white hover:bg-masala shadow-sm">📍 Mapa</a>'
     )
     if url:
         links += (
             f'<a href="{url}" target="_blank" rel="noopener" '
-            f'class="text-xs font-medium text-saffron hover:text-masala dark:text-gold dark:hover:text-orange-300">🌐 Web ↗</a>'
+            f'class="{btn} border border-saffron text-saffron hover:bg-orange-50 dark:hover:bg-orange-900/20">🌐 Web</a>'
         )
 
     haystack = ' '.join([name, address, note] + tags).lower()
@@ -85,7 +87,7 @@ def _card(r, i):
           {fbadges_html}
           {tags_html}
         </div>
-        <div class="px-5 py-3 border-t border-orange-50 dark:border-orange-900/30 flex items-center gap-4">
+        <div class="px-5 py-3 border-t border-orange-50 dark:border-orange-900/30 flex items-center gap-2">
           {links}
         </div>
       </div>"""
