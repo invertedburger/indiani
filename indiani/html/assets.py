@@ -40,6 +40,43 @@ THEME_CSS = """<style>
       opacity: .85;
     }
     .leaflet-popup-content-wrapper { border-radius: 12px; }
+
+    /* Filter chips */
+    .chip {
+      display: inline-flex; align-items: center; gap: 5px;
+      padding: 6px 12px; border-radius: 9999px; font-size: 13px; font-weight: 600;
+      cursor: pointer; user-select: none; white-space: nowrap;
+      border: 1px solid transparent; transition: all .15s ease;
+    }
+    .chip-off { background: #fff; color: #9a3412; border-color: #fed7aa; }
+    .dark .chip-off { background: #241a13; color: #fdba74; border-color: #7c2d12; }
+    .chip-off:hover { background: #fff7ed; }
+    .dark .chip-off:hover { background: #2e2018; }
+    .chip-on { background: #ea580c; color: #fff; border-color: #ea580c; box-shadow: 0 2px 8px rgba(234,88,12,.4); }
+    .chip:active { transform: scale(.95); }
+
+    /* Facet badge pill on a card */
+    .fbadge {
+      display: inline-flex; align-items: center; gap: 4px;
+      padding: 2px 8px; border-radius: 9999px; font-size: 11px; font-weight: 600;
+    }
+    /* Rating badge */
+    .rating {
+      display: inline-flex; align-items: center; gap: 3px;
+      font-size: 12px; font-weight: 700; color: #b45309;
+    }
+    .dark .rating { color: #fbbf24; }
+    /* Distance label (filled in by geolocation) */
+    .dist { font-size: 11px; font-weight: 600; color: #ea580c; }
+    .dark .dist { color: #fdba74; }
+
+    /* All-you-can-eat laughing-Buddha sticker, top-right corner of a card */
+    .ayce-sticker {
+      position: absolute; top: -10px; right: -6px; width: 64px; height: 64px;
+      background-size: contain; background-repeat: no-repeat; background-position: center;
+      filter: drop-shadow(0 3px 6px rgba(0,0,0,.45));
+      transform: rotate(8deg); pointer-events: none;
+    }
   </style>"""
 
 THEME_JS = """
@@ -54,20 +91,4 @@ THEME_JS = """
       _updateThemeBtn();
     });
     _updateThemeBtn();
-
-    // Live search over restaurant cards (name + tags + note).
-    const searchInput = document.getElementById('search');
-    if (searchInput) {
-      searchInput.addEventListener('input', () => {
-        const q = searchInput.value.trim().toLowerCase();
-        let shown = 0;
-        document.querySelectorAll('[data-search]').forEach(el => {
-          const hit = el.dataset.search.includes(q);
-          el.style.display = hit ? '' : 'none';
-          if (hit) shown++;
-        });
-        const none = document.getElementById('noResults');
-        if (none) none.style.display = shown ? 'none' : '';
-      });
-    }
 """

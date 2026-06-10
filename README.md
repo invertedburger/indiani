@@ -66,11 +66,34 @@ Stačí přidat objekt do `restaurants.json`, žádné změny kódu:
 | `name` | ano | Název restaurace (klíč pro cache souřadnic) |
 | `address` | doporučeno | Adresa, použije se pro geokódování |
 | `url` | ne | Web restaurace |
-| `tags` | ne | Štítky (kuchyně, halal, vegetariánské, momo...) |
+| `tags` | ne | Popisné štítky (kuchyně, momo, thali, street food...) |
+| `attrs` | ne | Filtrovatelné facety, viz níže (`ayce`, `lunch`, `delivery`) |
+| `rating` | ne | Google hodnocení, např. `4.7` (zobrazí se jako ⭐ odznak) |
 | `price` | ne | Cenová hladina, např. `$`, `$$`, `$$$` |
 | `note` | ne | Krátký popis na kartě |
 | `geocode` | ne | Vlastní dotaz pro geokódování (přebije `address`) |
 | `coords` | ne | `[lat, lng]` napevno, přeskočí geokódování |
+
+### Facety a filtrování
+
+`attrs` je seznam klíčů z [indiani/facets.py](indiani/facets.py). Pro každý
+klíč, který se vyskytne v datech, se nahoře automaticky objeví filtrační chip a
+na kartě ikonka. Aktuální facety:
+
+| Klíč | Ikonka | Význam |
+|------|--------|--------|
+| `ayce` | 🍽️ (sticker se smějícím Buddhou) | All you can eat / bufet |
+| `lunch` | 🥢 | Polední menu (všední dny) |
+| `delivery` | 🚚 | Rozvoz (foodora / Wolt / vlastní) |
+
+Navíc: chip **⭐ 4.5+** filtruje podle `rating` a tlačítko **📍 Nejblíž u mě**
+zjistí polohu z prohlížeče, dopočítá vzdálenost ke každé restauraci a seřadí je.
+Nový facet přidáš do `FACETS` v `facets.py` a do `attrs` dané restaurace, nic
+víc.
+
+> Pozn.: `rating` je statické číslo (Google API hodnocení zdarma nedává), takže
+> ho je potřeba občas ručně přepsat. Mírně zastaralá hodnota nevadí, hvězdička
+> prokliká na Google.
 
 Pokud restaurace nemá přesnou adresu, doplň `geocode` nebo `coords`, ať pin nesedí na středu Brna.
 
