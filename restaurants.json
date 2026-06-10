@@ -1,0 +1,29 @@
+{
+  "_comment": "Seznam indických (a indicko-nepálských) restaurací v Brně. Toto je počáteční seed — ověř adresy/odkazy a klidně doplň další. Pole 'geocode' je nepovinné: když chybí, použije se 'address'. Souřadnice se cachují v results/coords.json.",
+  "restaurants": [
+    {
+      "name": "Taj Mahal",
+      "address": "Běhounská 116/4, 602 00 Brno",
+      "url": "https://www.tajmahalbrno.cz/",
+      "tags": ["severoindická", "tandoori", "vegetariánské"],
+      "price": "$$",
+      "note": "Klasická severoindická kuchyně, kari a tandoori v centru."
+    },
+    {
+      "name": "Indian by Nature",
+      "address": "Údolní 11, 602 00 Brno",
+      "url": "https://www.indianbynature.cz/",
+      "tags": ["indická", "vegetariánské", "halal"],
+      "price": "$$",
+      "note": "Oblíbená indická restaurace kousek od centra."
+    },
+    {
+      "name": "Everest Indian & Nepali Restaurant",
+      "address": "Lidická 12, 602 00 Brno",
+      "url": "",
+      "tags": ["indická", "nepálská", "momo"],
+      "price": "$$",
+      "note": "Indicko-nepálské menu, thali a momo."
+    }
+  ]
+}

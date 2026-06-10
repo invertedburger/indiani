@@ -1,0 +1,11 @@
+{
+  "site_title": "Indiáni v Brně",
+  "site_tagline": "Všechny indické restaurace v Brně na jednom místě",
+  "domain": "indiani.ivomartisek.cz",
+  "data_file": "restaurants.json",
+  "results_dir": "results",
+  "assets_dir": "assets",
+  "hero_image": "hero.jpg",
+  "map_center": [49.1951, 16.6068],
+  "map_zoom": 13
+}
