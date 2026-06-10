@@ -53,8 +53,20 @@ THEME_CSS = """<style>
     .dark .chip-off { background: #241a13; color: #fdba74; border-color: #7c2d12; }
     .chip-off:hover { background: #fff7ed; }
     .dark .chip-off:hover { background: #2e2018; }
-    .chip-on { background: #ea580c; color: #fff; border-color: #ea580c; box-shadow: 0 2px 8px rgba(234,88,12,.4); }
+    .chip-on { background: #d97746; color: #fff; border-color: #d97746; box-shadow: 0 1px 5px rgba(217,119,70,.35); }
     .chip:active { transform: scale(.95); }
+
+    /* Card action buttons (softer orange than the accent) */
+    .btn-act {
+      display: inline-flex; align-items: center; justify-content: center; gap: 6px;
+      padding: 8px 16px; border-radius: 12px; font-size: 14px; font-weight: 600;
+      transition: background .15s ease, border-color .15s ease;
+    }
+    .btn-map { background: #d97746; color: #fff; }
+    .btn-map:hover { background: #c2683b; }
+    .btn-web { background: transparent; border: 1px solid #e6b58c; color: #b45309; }
+    .dark .btn-web { border-color: #7c4a2d; color: #fdba74; }
+    .btn-web:hover { background: rgba(217,119,70,.12); }
 
     /* Facet badge pill on a card */
     .fbadge {
