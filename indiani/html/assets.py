@@ -16,18 +16,6 @@ TAILWIND = (
 # Custom CSS: hero banner, mandala divider, card hover, tag chips, marker pulse.
 THEME_CSS = """<style>
     body { font-family: ui-sans-serif, system-ui, 'Segoe UI', sans-serif; }
-    .hero {
-      background-size: cover; background-position: center 38%;
-      position: relative;
-    }
-    .hero::after {
-      content: ''; position: absolute; inset: 0;
-      background: linear-gradient(180deg, rgba(0,0,0,.15) 0%, rgba(0,0,0,.05) 40%, rgba(255,247,237,1) 100%);
-    }
-    .dark .hero::after {
-      background: linear-gradient(180deg, rgba(0,0,0,.35) 0%, rgba(0,0,0,.25) 40%, rgba(28,20,16,1) 100%);
-    }
-    .hero-inner { position: relative; z-index: 1; }
     .tag {
       display: inline-block; padding: 2px 9px; border-radius: 9999px;
       font-size: 11px; font-weight: 600;

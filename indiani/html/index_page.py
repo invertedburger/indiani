@@ -86,18 +86,19 @@ def generate(restaurants, timestamp):
 </head>
 <body class="bg-orange-50 dark:bg-[#1c1410] min-h-screen text-gray-800 dark:text-orange-50">
 
-  <header class="hero h-56 sm:h-72" style="background-image:url('{HERO_IMAGE}')">
-    <div class="hero-inner max-w-3xl mx-auto h-full px-4 flex items-start justify-end pt-4">
+  <header class="max-w-3xl mx-auto px-4 pt-4">
+    <div class="relative rounded-2xl overflow-hidden shadow-md">
+      <img src="{HERO_IMAGE}" alt="{SITE_TITLE}" class="w-full block">
       <button id="themeBtn" title="Přepnout motiv"
-              class="w-9 h-9 flex items-center justify-center rounded-full bg-black/30 text-white backdrop-blur hover:bg-black/50 transition-colors"></button>
+              class="absolute top-3 right-3 w-9 h-9 flex items-center justify-center rounded-full bg-black/35 text-white backdrop-blur hover:bg-black/55 transition-colors"></button>
     </div>
   </header>
-  <div class="mandala-divider"></div>
+  <div class="mandala-divider max-w-3xl mx-auto mt-3 rounded-full"></div>
 
-  <main class="max-w-3xl mx-auto px-4 -mt-2">
-    <div class="pt-6 pb-2">
-      <h1 class="text-3xl font-extrabold text-masala dark:text-gold tracking-tight">{SITE_TITLE}</h1>
-      <p class="text-gray-600 dark:text-gray-300 mt-1">{SITE_TAGLINE}</p>
+  <main class="max-w-3xl mx-auto px-4">
+    <div class="pt-5 pb-2">
+      <h1 class="sr-only">{SITE_TITLE}</h1>
+      <p class="text-lg font-semibold text-masala dark:text-gold">{SITE_TAGLINE}</p>
       <p class="text-xs text-gray-400 dark:text-gray-500 mt-1">{count} restaurací &middot; klikni na pin pro detail</p>
     </div>
 
