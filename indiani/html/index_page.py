@@ -127,7 +127,13 @@ def generate(restaurants, timestamp):
 
     (function() {{
       const lt = L.tileLayer('https://{{s}}.basemaps.cartocdn.com/light_all/{{z}}/{{x}}/{{y}}{{r}}.png', {{attribution:'&copy; OSM &copy; CARTO', maxZoom:19}});
-      const dt = L.tileLayer('https://{{s}}.basemaps.cartocdn.com/dark_all/{{z}}/{{x}}/{{y}}{{r}}.png',  {{attribution:'&copy; OSM &copy; CARTO', maxZoom:19}});
+      // Esri Dark Gray Canvas: base + reference (street labels) overlay. Esri tiles
+      // use {{z}}/{{y}}/{{x}} order and have no {{s}} subdomain.
+      const _esri = 'https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/';
+      const dt = L.layerGroup([
+        L.tileLayer(_esri + 'World_Dark_Gray_Base/MapServer/tile/{{z}}/{{y}}/{{x}}', {{attribution:'&copy; Esri', maxZoom:16}}),
+        L.tileLayer(_esri + 'World_Dark_Gray_Reference/MapServer/tile/{{z}}/{{y}}/{{x}}', {{maxZoom:16}})
+      ]);
       const map = L.map('map').setView([{MAP_CENTER[0]}, {MAP_CENTER[1]}], {MAP_ZOOM});
       let tile = document.documentElement.classList.contains('dark') ? dt : lt;
       tile.addTo(map);
