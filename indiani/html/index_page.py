@@ -3,12 +3,23 @@ cards (with facet badges, rating and the all-you-can-eat sticker) and a Leaflet
 map. Geolocation lets the visitor sort restaurants by distance from where they
 are."""
 import json
+import re
 from urllib.parse import quote_plus
 from indiani.html.assets import DARK_INIT, TAILWIND, THEME_CSS, THEME_JS
 from indiani.facets import FACETS, FACET_ORDER, TOP_RATING
 from indiani.config import SITE_TITLE, SITE_TAGLINE, HERO_IMAGE, MAP_CENTER, MAP_ZOOM
 
 AYCE_IMG = 'ayce.png'
+_POSTAL = re.compile(r'\s*\d{3}\s?\d{2}\s*')
+
+
+def _short_addr(a):
+    """Trim the address for display: drop the postal code and a trailing 'Brno'
+    (every place is in/around Brno), keeping the street and any other town."""
+    a = _POSTAL.sub(' ', a)
+    a = re.sub(r',?\s*Brno\s*$', '', a)
+    a = re.sub(r'\s+', ' ', a)
+    return a.strip().strip(',').strip()
 
 
 def _card(r, i):
@@ -16,7 +27,6 @@ def _card(r, i):
     address = r.get('address', '')
     url = r.get('url', '')
     price = r.get('price', '')
-    note = r.get('note', '')
     tags = r.get('tags', [])
     attrs = r.get('attrs', [])
     rating = r.get('rating')
@@ -25,46 +35,50 @@ def _card(r, i):
     sticker = (f'<div class="ayce-sticker" style="background-image:url(\'{AYCE_IMG}\')" '
                f'title="All you can eat"></div>') if has_ayce else ''
 
-    # Facet badges (ayce is shown as the corner sticker, not a pill).
+    # Rating pill (links to Google reviews). Lives in the chips row, not the
+    # top-right corner, so the all-you-can-eat sticker never covers it.
+    rating_chip = ''
+    if rating:
+        reviews_q = quote_plus(f'{name} {address}')
+        rating_chip = (
+            f'<a href="https://www.google.com/maps/search/?api=1&query={reviews_q}" target="_blank" '
+            f'rel="noopener" class="rating" title="Hodnocení na Google">⭐ {str(rating).replace(".", ",")}</a>'
+        )
+
+    # Concrete price (e.g. buffet price) instead of $ symbols.
+    price_badge = f'<span class="fbadge price-badge">💰 {price}</span>' if price else ''
+
+    # Feature badges. AYCE is the corner sticker (+ its price), so no extra pill.
     fbadges = ''
     for k in FACET_ORDER:
         if k in attrs and k != 'ayce' and k in FACETS:
             f = FACETS[k]
             fbadges += f'<span class="fbadge {f["cls"]}">{f["emoji"]} {f["label"]}</span>'
-    if has_ayce:
-        f = FACETS['ayce']
-        fbadges = f'<span class="fbadge {f["cls"]}">{f["emoji"]} {f["label"]}</span>' + fbadges
-    # Concrete price (e.g. buffet price) shown as a badge instead of $ symbols.
-    price_badge = (
-        f'<span class="fbadge price-badge">💰 {price}</span>' if price else ''
-    )
-    badges = price_badge + fbadges
-    fbadges_html = f'<div class="flex flex-wrap gap-1.5 mt-2">{badges}</div>' if badges else ''
 
-    tags_html = ''.join(f'<span class="tag">{t}</span>' for t in tags)
-    if tags_html:
-        tags_html = f'<div class="flex flex-wrap gap-1.5 mt-2">{tags_html}</div>'
+    tag_chips = ''.join(f'<span class="tag">{t}</span>' for t in tags)
 
-    rating_html = ''
-    if rating:
-        reviews_q = quote_plus(f'{name} {address}')
-        rating_html = (
-            f'<a href="https://www.google.com/maps/search/?api=1&query={reviews_q}" target="_blank" '
-            f'rel="noopener" class="rating" title="Hodnocení na Google">⭐ {str(rating).replace(".", ",")}</a>'
-        )
+    # The essentials in one wrapping row: rating, price, features, cuisine tags.
+    chips = rating_chip + price_badge + fbadges + tag_chips
+    chips_html = f'<div class="flex flex-wrap items-center gap-1.5">{chips}</div>' if chips else ''
 
+    pin_svg = ('<svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">'
+               '<path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 '
+               '9.5a2.5 2.5 0 110-5 2.5 2.5 0 010 5z"/></svg>')
+    globe_svg = ('<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" '
+                 'stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="9"/>'
+                 '<path d="M3 12h18M12 3c2.6 2.7 2.6 15.3 0 18M12 3c-2.6 2.7-2.6 15.3 0 18"/></svg>')
     maps_q = quote_plus(f'{name} {address}')
     links = (
         f'<a href="https://www.google.com/maps/search/?api=1&query={maps_q}" target="_blank" rel="noopener" '
-        f'class="btn-act btn-map">📍 Mapa</a>'
+        f'class="btn-act btn-map">{pin_svg} Mapa</a>'
     )
     if url:
         links += (
             f'<a href="{url}" target="_blank" rel="noopener" '
-            f'class="btn-act btn-web">🌐 Web</a>'
+            f'class="btn-act btn-web">{globe_svg} Web</a>'
         )
 
-    haystack = ' '.join([name, address, note] + tags).lower()
+    haystack = ' '.join([name, address] + tags).lower()
     lat = r['coords'][0] if r.get('coords') else ''
     lng = r['coords'][1] if r.get('coords') else ''
 
@@ -72,18 +86,17 @@ def _card(r, i):
       <div data-search="{haystack}" data-attrs="{' '.join(attrs)}" data-rating="{rating or 0}"
            data-lat="{lat}" data-lng="{lng}"
            class="anim-card card relative bg-white dark:bg-[#241a13] rounded-2xl shadow-sm border border-orange-100 dark:border-orange-900/40 flex flex-col"
-           style="animation-delay:{i * 60}ms">
+           style="animation-delay:{i * 50}ms">
         {sticker}
-        <div class="px-5 pt-5 pb-4 flex flex-col gap-1 flex-1">
-          <h3 class="font-bold text-gray-800 dark:text-orange-50 leading-tight pr-16">{name}</h3>
-          <div class="flex items-center gap-2">
-            <p class="text-xs text-gray-500 dark:text-gray-400 flex-1 min-w-0 truncate">{address}</p>
-            <span class="dist" data-dist-label style="display:none"></span>
-            {rating_html}
+        <div class="px-5 pt-5 pb-4 flex flex-col gap-2 flex-1">
+          <div class="pr-16">
+            <h3 class="font-bold text-gray-800 dark:text-orange-50 leading-tight">{name}</h3>
+            <div class="flex items-center gap-2 mt-0.5">
+              <p class="text-xs text-gray-500 dark:text-gray-400 truncate">{_short_addr(address)}</p>
+              <span class="dist" data-dist-label style="display:none"></span>
+            </div>
           </div>
-          {f'<p class="text-sm text-gray-600 dark:text-gray-300 mt-1">{note}</p>' if note else ''}
-          {fbadges_html}
-          {tags_html}
+          {chips_html}
         </div>
         <div class="px-5 py-3 border-t border-orange-50 dark:border-orange-900/30 flex items-center gap-2">
           {links}
@@ -153,8 +166,8 @@ def generate(restaurants, timestamp):
     </section>
 
     <div class="mb-3">
-      <input id="search" type="search" placeholder="🔍 Hledat restauraci, jídlo, čtvrť…"
-             class="w-full px-4 py-2.5 rounded-xl border border-orange-200 dark:border-orange-900/50 bg-white dark:bg-[#241a13] text-gray-800 dark:text-orange-50 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-saffron"/>
+      <input id="search" type="search" placeholder="Hledat název nebo čtvrť…"
+             class="w-full px-3 py-2 text-sm rounded-lg border border-orange-200 dark:border-orange-900/50 bg-white dark:bg-[#241a13] text-gray-800 dark:text-orange-50 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-saffron"/>
     </div>
     {filter_bar}
 
@@ -173,7 +186,7 @@ def generate(restaurants, timestamp):
     {THEME_JS}
 
     /* ---- Map ---- */
-    let _map, _userMarker;
+    let _map;
     (function() {{
       const lt = L.tileLayer('https://{{s}}.basemaps.cartocdn.com/light_all/{{z}}/{{x}}/{{y}}{{r}}.png', {{attribution:'&copy; OSM &copy; CARTO', maxZoom:19}});
       const _esri = 'https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/';
@@ -245,46 +258,65 @@ def generate(restaurants, timestamp):
     search.addEventListener('input', applyFilters);
     applyFilters();
 
-    /* ---- Distance from the visitor ---- */
+    /* ---- "Your location" pin: GPS or draggable; distances update from it ---- */
+    let _userMarker = null;
     function _haversine(la1, lo1, la2, lo2) {{
       const R = 6371, toRad = x => x * Math.PI / 180;
       const dLa = toRad(la2 - la1), dLo = toRad(lo2 - lo1);
       const a = Math.sin(dLa/2)**2 + Math.cos(toRad(la1)) * Math.cos(toRad(la2)) * Math.sin(dLo/2)**2;
       return 2 * R * Math.asin(Math.sqrt(a));
     }}
-    function _fmt(km) {{
-      return km < 1 ? Math.round(km * 1000) + ' m' : km.toFixed(1).replace('.', ',') + ' km';
+    function _fmt(km) {{ return km < 1 ? Math.round(km*1000) + ' m' : km.toFixed(1).replace('.', ',') + ' km'; }}
+
+    function _recompute(lat, lng) {{
+      const cards = [...document.querySelectorAll('#cards-grid > [data-search]')];
+      cards.forEach(el => {{
+        const la = parseFloat(el.dataset.lat), lo = parseFloat(el.dataset.lng);
+        const lbl = el.querySelector('[data-dist-label]');
+        if (!isNaN(la) && !isNaN(lo)) {{
+          const km = _haversine(lat, lng, la, lo);
+          el.dataset.dist = km; lbl.textContent = _fmt(km); lbl.style.display = '';
+        }}
+      }});
+      cards.sort((a, b) => (parseFloat(a.dataset.dist) || 1e9) - (parseFloat(b.dataset.dist) || 1e9));
+      const grid = document.getElementById('cards-grid');
+      cards.forEach(c => grid.appendChild(c));
     }}
+
+    const _userIcon = L.divIcon({{
+      className: '',
+      html: '<div style="background:#2563eb;color:#fff;border-radius:50% 50% 50% 0;transform:rotate(-45deg);width:30px;height:30px;display:flex;align-items:center;justify-content:center;box-shadow:0 2px 8px rgba(0,0,0,.45);border:2px solid #fff"><span style="transform:rotate(45deg);font-size:14px">🧍</span></div>',
+      iconSize:[30,30], iconAnchor:[15,30], popupAnchor:[0,-28]
+    }});
+    function _placeUser(lat, lng, openTip) {{
+      if (_userMarker) {{ _userMarker.setLatLng([lat, lng]); }}
+      else {{
+        _userMarker = L.marker([lat, lng], {{draggable:true, icon:_userIcon, zIndexOffset:1000}})
+          .addTo(_map).bindPopup('Tvoje poloha &mdash; přetáhni mě');
+        _userMarker.on('dragend', e => {{ const p = e.target.getLatLng(); _recompute(p.lat, p.lng); }});
+        _map.on('click', e => _placeUser(e.latlng.lat, e.latlng.lng));  // klik do mapy přesune špendlík
+      }}
+      if (openTip) _userMarker.openPopup();
+      _recompute(lat, lng);
+    }}
+
     const nearBtn = document.getElementById('nearBtn');
     nearBtn.addEventListener('click', () => {{
-      if (!navigator.geolocation) {{ alert('Tvůj prohlížeč neumí zjistit polohu.'); return; }}
-      nearBtn.textContent = '📍 Zjišťuji…';
-      navigator.geolocation.getCurrentPosition(pos => {{
-        const ula = pos.coords.latitude, ulo = pos.coords.longitude;
-        const cards = [...document.querySelectorAll('#cards-grid > [data-search]')];
-        cards.forEach(el => {{
-          const la = parseFloat(el.dataset.lat), lo = parseFloat(el.dataset.lng);
-          const lbl = el.querySelector('[data-dist-label]');
-          if (!isNaN(la) && !isNaN(lo)) {{
-            const km = _haversine(ula, ulo, la, lo);
-            el.dataset.dist = km;
-            lbl.textContent = _fmt(km); lbl.style.display = '';
-          }}
+      nearBtn.classList.remove('chip-off'); nearBtn.classList.add('chip-on');
+      if (navigator.geolocation) {{
+        nearBtn.textContent = '📍 Hledám polohu…';
+        navigator.geolocation.getCurrentPosition(pos => {{
+          _placeUser(pos.coords.latitude, pos.coords.longitude, false);
+          _map.setView([pos.coords.latitude, pos.coords.longitude], 14);
+          nearBtn.textContent = '📍 Podle špendlíku';
+        }}, () => {{
+          const c = _map.getCenter(); _placeUser(c.lat, c.lng, true);
+          nearBtn.textContent = '📍 Přetáhni špendlík';
         }});
-        // Sort cards by distance, nearest first.
-        cards.sort((a, b) => (parseFloat(a.dataset.dist) || 1e9) - (parseFloat(b.dataset.dist) || 1e9));
-        const grid = document.getElementById('cards-grid');
-        cards.forEach(c => grid.appendChild(c));
-        // Drop a "you are here" marker and zoom there.
-        if (_userMarker) _map.removeLayer(_userMarker);
-        _userMarker = L.circleMarker([ula, ulo], {{radius:8, color:'#2563eb', fillColor:'#3b82f6', fillOpacity:1, weight:2}})
-          .addTo(_map).bindPopup('Tady jsi');
-        _map.setView([ula, ulo], 14);
-        nearBtn.textContent = '📍 Seřazeno podle vzdálenosti';
-      }}, () => {{
-        nearBtn.textContent = '📍 Nejblíž u mě';
-        alert('Polohu se nepodařilo zjistit.');
-      }});
+      }} else {{
+        const c = _map.getCenter(); _placeUser(c.lat, c.lng, true);
+        nearBtn.textContent = '📍 Přetáhni špendlík';
+      }}
     }});
   </script>
 </body>
