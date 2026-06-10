@@ -34,7 +34,12 @@ def _card(r, i):
     if has_ayce:
         f = FACETS['ayce']
         fbadges = f'<span class="fbadge {f["cls"]}">{f["emoji"]} {f["label"]}</span>' + fbadges
-    fbadges_html = f'<div class="flex flex-wrap gap-1.5 mt-2">{fbadges}</div>' if fbadges else ''
+    # Concrete price (e.g. buffet price) shown as a badge instead of $ symbols.
+    price_badge = (
+        f'<span class="fbadge price-badge">💰 {price}</span>' if price else ''
+    )
+    badges = price_badge + fbadges
+    fbadges_html = f'<div class="flex flex-wrap gap-1.5 mt-2">{badges}</div>' if badges else ''
 
     tags_html = ''.join(f'<span class="tag">{t}</span>' for t in tags)
     if tags_html:
@@ -59,11 +64,6 @@ def _card(r, i):
             f'class="text-xs font-medium text-saffron hover:text-masala dark:text-gold dark:hover:text-orange-300">🌐 Web ↗</a>'
         )
 
-    price_html = (
-        f'<span class="shrink-0 text-sm font-semibold text-amber-600 dark:text-gold">{price}</span>'
-        if price else ''
-    )
-
     haystack = ' '.join([name, address, note] + tags).lower()
     lat = r['coords'][0] if r.get('coords') else ''
     lng = r['coords'][1] if r.get('coords') else ''
@@ -75,10 +75,7 @@ def _card(r, i):
            style="animation-delay:{i * 60}ms">
         {sticker}
         <div class="px-5 pt-5 pb-4 flex flex-col gap-1 flex-1">
-          <div class="flex items-start justify-between gap-3">
-            <h3 class="font-bold text-gray-800 dark:text-orange-50 leading-tight pr-10">{name}</h3>
-            {price_html}
-          </div>
+          <h3 class="font-bold text-gray-800 dark:text-orange-50 leading-tight pr-16">{name}</h3>
           <div class="flex items-center gap-3">
             <p class="text-xs text-gray-500 dark:text-gray-400">{address}</p>
             {rating_html}
@@ -203,7 +200,8 @@ def generate(restaurants, timestamp):
         L.marker([r.lat, r.lng], {{icon}}).addTo(_map)
           .bindPopup('<b style="font-size:13px">'+r.n+'</b><br><span style="font-size:11px;color:#666">'+r.a+'</span>'+web);
       }});
-      if (rs.length) _map.fitBounds(rs.map(r => [r.lat, r.lng]), {{padding:[40,40], maxZoom:15}});
+      // Fit every pin in view (pins span the centre plus Modřice, Slatina, Královo Pole).
+      if (rs.length) _map.fitBounds(rs.map(r => [r.lat, r.lng]), {{padding:[55,55], maxZoom:14}});
     }})();
 
     /* ---- Filtering: search + facet chips + rating ---- */

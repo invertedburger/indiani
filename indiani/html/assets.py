@@ -72,11 +72,13 @@ THEME_CSS = """<style>
 
     /* All-you-can-eat laughing-Buddha sticker, top-right corner of a card */
     .ayce-sticker {
-      position: absolute; top: -10px; right: -6px; width: 64px; height: 64px;
+      position: absolute; top: -16px; right: -12px; width: 92px; height: 92px;
       background-size: contain; background-repeat: no-repeat; background-position: center;
-      filter: drop-shadow(0 3px 6px rgba(0,0,0,.45));
+      filter: drop-shadow(0 3px 7px rgba(0,0,0,.5));
       transform: rotate(8deg); pointer-events: none;
     }
+    .price-badge { background: #fde68a; color: #92400e; }
+    .dark .price-badge { background: rgba(180,83,9,.45); color: #fde68a; }
   </style>"""
 
 THEME_JS = """
