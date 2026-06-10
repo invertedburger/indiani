@@ -17,12 +17,13 @@ TAILWIND = (
 # Custom CSS: hero banner, mandala divider, card hover, tag chips, marker pulse.
 THEME_CSS = """<style>
     body { font-family: ui-sans-serif, system-ui, 'Segoe UI', sans-serif; }
+    /* Descriptive tags: subtle ghost chips so they stay behind the feature badges. */
     .tag {
-      display: inline-block; padding: 2px 9px; border-radius: 9999px;
-      font-size: 11px; font-weight: 600;
-      background: #fed7aa; color: #9a3412;
+      display: inline-block; padding: 1px 8px; border-radius: 9999px;
+      font-size: 11px; font-weight: 500;
+      background: transparent; border: 1px solid #fed7aa; color: #b45309;
     }
-    .dark .tag { background: rgba(154,52,18,.35); color: #fdba74; }
+    .dark .tag { border-color: #7c2d12; color: #fdba74; }
     .card {
       transition: box-shadow .2s ease, transform .2s ease, border-color .2s ease;
     }
@@ -60,12 +61,14 @@ THEME_CSS = """<style>
       display: inline-flex; align-items: center; gap: 4px;
       padding: 2px 8px; border-radius: 9999px; font-size: 11px; font-weight: 600;
     }
-    /* Rating badge */
+    /* Rating: gold pill so every card has a consistent rating chip. */
     .rating {
       display: inline-flex; align-items: center; gap: 3px;
-      font-size: 12px; font-weight: 700; color: #b45309;
+      padding: 1px 8px; border-radius: 9999px;
+      font-size: 12px; font-weight: 700;
+      background: #fde68a; color: #92400e;
     }
-    .dark .rating { color: #fbbf24; }
+    .dark .rating { background: rgba(245,158,11,.18); color: #fcd34d; }
     /* Distance label (filled in by geolocation) */
     .dist { font-size: 11px; font-weight: 600; color: #ea580c; }
     .dark .dist { color: #fdba74; }
@@ -77,8 +80,8 @@ THEME_CSS = """<style>
       filter: drop-shadow(0 3px 7px rgba(0,0,0,.5));
       transform: rotate(8deg); pointer-events: none;
     }
-    .price-badge { background: #fde68a; color: #92400e; }
-    .dark .price-badge { background: rgba(180,83,9,.45); color: #fde68a; }
+    .price-badge { background: transparent; border: 1px solid #fbbf24; color: #b45309; }
+    .dark .price-badge { border-color: #a16207; color: #fcd34d; }
   </style>"""
 
 THEME_JS = """

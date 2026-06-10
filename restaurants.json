@@ -96,17 +96,17 @@
       "address": "třída Kpt. Jaroše 1929/10, 602 00 Brno",
       "url": "https://www.gopal.menu/",
       "tags": ["indická", "vegetariánské"],
-      "rating": null,
+      "rating": 4.5,
       "attrs": [],
       "price": "",
-      "note": "Indická a nepálská kuchyně v Černých Polích."
+      "note": "Vegetariánská a veganská kuchyně inspirovaná Indií v Černých Polích."
     },
     {
       "name": "Restaurace Himalaya",
       "address": "Nádražní 506/8, 602 00 Brno",
       "url": "https://himalayarestaurace.cz/",
       "tags": ["indická", "nepálská"],
-      "rating": null,
+      "rating": 4.4,
       "attrs": ["delivery"],
       "price": "",
       "note": "Indicko-nepálská restaurace u nádraží, rozvoz jídla."
@@ -146,7 +146,7 @@
       "address": "Netroufalky 770/14, 625 00 Brno",
       "url": "",
       "tags": ["indická", "thali"],
-      "rating": null,
+      "rating": 4.4,
       "attrs": [],
       "price": "",
       "note": "Indická kuchyně v Bohunicích u kampusu."
@@ -177,9 +177,9 @@
       "url": "https://www.mount-everest.cz/golden-nepal/",
       "tags": ["nepálská", "indická"],
       "rating": 4.4,
-      "attrs": ["delivery"],
-      "price": "",
-      "note": "Nepálská a indická restaurace, rozvoz přes Wolt."
+      "attrs": ["ayce", "lunch", "delivery"],
+      "price": "Bufet 185 Kč",
+      "note": "Nepálská a indická restaurace u bývalé Mosilany, bufet all you can eat, rozvoz přes Wolt."
     },
     {
       "name": "Desi Dhaba",
@@ -206,7 +206,7 @@
       "address": "Běhounská 12/14, 602 00 Brno",
       "url": "http://www.restauracevbrne.net/flavours/",
       "tags": ["indická", "tandoori"],
-      "rating": null,
+      "rating": 4.0,
       "attrs": [],
       "price": "",
       "note": "Indická restaurace v centru kousek od náměstí Svobody."

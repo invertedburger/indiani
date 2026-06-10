@@ -23,7 +23,7 @@ FACETS = {
     'delivery': {
         'emoji': '🚚',
         'label': 'Rozvoz',
-        'cls': 'bg-sky-100 text-sky-800 dark:bg-sky-900/40 dark:text-sky-300',
+        'cls': 'bg-emerald-100 text-emerald-800 dark:bg-emerald-900/40 dark:text-emerald-300',
     },
 }
 

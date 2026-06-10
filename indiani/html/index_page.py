@@ -78,10 +78,10 @@ def _card(r, i):
         {sticker}
         <div class="px-5 pt-5 pb-4 flex flex-col gap-1 flex-1">
           <h3 class="font-bold text-gray-800 dark:text-orange-50 leading-tight pr-16">{name}</h3>
-          <div class="flex items-center gap-3">
-            <p class="text-xs text-gray-500 dark:text-gray-400">{address}</p>
+          <div class="flex items-center gap-2">
+            <p class="text-xs text-gray-500 dark:text-gray-400 flex-1 min-w-0 truncate">{address}</p>
+            <span class="dist" data-dist-label style="display:none"></span>
             {rating_html}
-            <span class="dist ml-auto" data-dist-label style="display:none"></span>
           </div>
           {f'<p class="text-sm text-gray-600 dark:text-gray-300 mt-1">{note}</p>' if note else ''}
           {fbadges_html}
