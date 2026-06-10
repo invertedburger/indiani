@@ -1,9 +1,10 @@
 """Shared inline CSS and JS. No build step — Tailwind via CDN plus a small block
 of custom CSS for the warm "Indian spice" palette and the hero banner."""
 
-# Apply saved theme before paint to avoid a flash of the wrong colour scheme.
+# Apply theme before paint to avoid a flash. Dark is the default; light only when
+# the user has explicitly chosen it.
 DARK_INIT = (
-    "<script>if(localStorage.getItem('theme')==='dark')"
+    "<script>if(localStorage.getItem('theme')!=='light')"
     "document.documentElement.classList.add('dark');</script>"
 )
 
