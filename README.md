@@ -99,6 +99,18 @@ Pokud restaurace nemá přesnou adresu, doplň `geocode` nebo `coords`, ať pin 
 
 > Aktuální seznam je počáteční seed. Adresy a odkazy je potřeba ověřit a seznam doplnit o další podniky.
 
+## Testy
+
+```bash
+pip install -r requirements-dev.txt
+playwright install chromium   # jen pro e2e
+pytest                        # data + build (rychlé), nepotřebují síť
+```
+
+- `tests/test_data.py` - validace `restaurants.json` (unikátní názvy, rating 1-5, známé `attrs`, formát URL).
+- `tests/test_build.py` - build a kontrola HTML: počet karet, AYCE stickery, filtrační chipy a hlavně že **každý mapový odkaz míří na souřadnice** dané restaurace.
+- `tests/test_e2e.py` - Playwright v prohlížeči: filtry, hledání a špendlík polohy (i fallback na střed Brna). Vyžaduje internet (CDN) a Chromium; bez nich se čistě přeskočí.
+
 ## Deploy
 
 **GitHub Pages (primární).** `.github/workflows/build.yml` při každém pushi do `main` spustí `python run.py`, vygeneruje `results/` a nasadí na Pages. Soubor `CNAME` (`indiani.ivomartisek.cz`) se generuje automaticky. Cache souřadnic se mezi běhy uchovává podle hashe `restaurants.json`.

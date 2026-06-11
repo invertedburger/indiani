@@ -59,9 +59,15 @@ def _card(r, i):
     globe_svg = ('<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" '
                  'stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="9"/>'
                  '<path d="M3 12h18M12 3c2.6 2.7 2.6 15.3 0 18M12 3c-2.6 2.7-2.6 15.3 0 18"/></svg>')
-    maps_q = quote_plus(f'{name} {address}')
+    # Map button -> exact coordinates (our geocoded pin), so it never lands on a
+    # wrong/ambiguous place. Falls back to a name+address search if coords are
+    # missing. (The rating chip keeps a name search, for the Google listing.)
+    if r.get('coords'):
+        map_query = f"{r['coords'][0]}%2C{r['coords'][1]}"
+    else:
+        map_query = quote_plus(f'{name} {address}')
     links = (
-        f'<a href="https://www.google.com/maps/search/?api=1&query={maps_q}" target="_blank" rel="noopener" '
+        f'<a href="https://www.google.com/maps/search/?api=1&query={map_query}" target="_blank" rel="noopener" '
         f'class="btn-act btn-map">{pin_svg} Mapa</a>'
     )
     if url:
