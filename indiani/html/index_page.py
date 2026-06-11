@@ -48,17 +48,9 @@ def _card(r, i):
     # Concrete price (e.g. buffet price) instead of $ symbols.
     price_badge = f'<span class="fbadge price-badge">💰 {price}</span>' if price else ''
 
-    # Feature badges. AYCE is the corner sticker (+ its price), so no extra pill.
-    fbadges = ''
-    for k in FACET_ORDER:
-        if k in attrs and k != 'ayce' and k in FACETS:
-            f = FACETS[k]
-            fbadges += f'<span class="fbadge {f["cls"]}">{f["emoji"]} {f["label"]}</span>'
-
-    tag_chips = ''.join(f'<span class="tag">{t}</span>' for t in tags)
-
-    # The essentials in one wrapping row: rating, price, features, cuisine tags.
-    chips = rating_chip + price_badge + fbadges + tag_chips
+    # The essentials only: rating and, for buffets, the price. (AYCE itself is
+    # the corner sticker.)
+    chips = rating_chip + price_badge
     chips_html = f'<div class="flex flex-wrap items-center gap-1.5">{chips}</div>' if chips else ''
 
     pin_svg = ('<svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">'
@@ -300,23 +292,25 @@ def generate(restaurants, timestamp):
       _recompute(lat, lng);
     }}
 
+    const BRNO = [{MAP_CENTER[0]}, {MAP_CENTER[1]}];
     const nearBtn = document.getElementById('nearBtn');
+    function _useBrnoCenter() {{
+      _placeUser(BRNO[0], BRNO[1], true);
+      _map.setView(BRNO, 13);
+      nearBtn.textContent = '📍 Přetáhni špendlík';
+    }}
     nearBtn.addEventListener('click', () => {{
       nearBtn.classList.remove('chip-off'); nearBtn.classList.add('chip-on');
-      if (navigator.geolocation) {{
-        nearBtn.textContent = '📍 Hledám polohu…';
-        navigator.geolocation.getCurrentPosition(pos => {{
-          _placeUser(pos.coords.latitude, pos.coords.longitude, false);
-          _map.setView([pos.coords.latitude, pos.coords.longitude], 14);
-          nearBtn.textContent = '📍 Podle špendlíku';
-        }}, () => {{
-          const c = _map.getCenter(); _placeUser(c.lat, c.lng, true);
-          nearBtn.textContent = '📍 Přetáhni špendlík';
-        }});
-      }} else {{
-        const c = _map.getCenter(); _placeUser(c.lat, c.lng, true);
-        nearBtn.textContent = '📍 Přetáhni špendlík';
-      }}
+      if (!navigator.geolocation) {{ _useBrnoCenter(); return; }}
+      nearBtn.textContent = '📍 Hledám polohu…';
+      navigator.geolocation.getCurrentPosition(pos => {{
+        const la = pos.coords.latitude, lo = pos.coords.longitude;
+        // GPS failed silently / user is far outside Brno -> default to the centre.
+        if (_haversine(la, lo, BRNO[0], BRNO[1]) > 40) {{ _useBrnoCenter(); return; }}
+        _placeUser(la, lo, false);
+        _map.setView([la, lo], 14);
+        nearBtn.textContent = '📍 Podle špendlíku';
+      }}, _useBrnoCenter, {{timeout: 8000}});
     }});
   </script>
 </body>

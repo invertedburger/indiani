@@ -202,14 +202,34 @@
       "note": "Vegetariánský a veganský samoobslužný bufet, váží se na váhu."
     },
     {
-      "name": "Flavours",
-      "address": "Běhounská 12/14, 602 00 Brno",
-      "url": "http://www.restauracevbrne.net/flavours/",
-      "tags": ["indická", "tandoori"],
-      "rating": 4.0,
+      "name": "Jomsom",
+      "address": "Bělohorská 3060/61, 636 00 Brno",
+      "url": "https://www.jomsom.cz/",
+      "tags": ["nepálská", "indická"],
+      "rating": 4.6,
       "attrs": [],
       "price": "",
-      "note": "Indická restaurace v centru kousek od náměstí Svobody."
+      "note": "Nepálská a indická restaurace v Židenicích."
+    },
+    {
+      "name": "Makalu",
+      "address": "Kamenná 170/1, 639 00 Brno",
+      "url": "",
+      "tags": ["nepálská", "indická"],
+      "rating": null,
+      "attrs": [],
+      "price": "",
+      "note": "Nepálská a indická restaurace ve Štýřicích."
+    },
+    {
+      "name": "Light of India",
+      "address": "Štefánikova 35, 602 00 Brno",
+      "url": "http://www.lightofindia.cz/",
+      "tags": ["indická"],
+      "rating": null,
+      "attrs": [],
+      "price": "",
+      "note": "Indická restaurace v Ponavě."
     },
     {
       "name": "Indická restaurace Namaskar (Smetanova)",
