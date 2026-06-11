@@ -59,3 +59,30 @@ jobs:
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
+
+  # Browser end-to-end tests run in parallel; they do not gate the deploy
+  # (a CDN/browser hiccup shouldn't block publishing the site).
+  e2e:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+          cache: pip
+
+      - name: Restore coords cache
+        uses: actions/cache@v4
+        with:
+          path: results/coords.json
+          key: indiani-coords-${{ hashFiles('restaurants.json') }}
+          restore-keys: indiani-coords-
+
+      - name: Install dependencies
+        run: |
+          pip install -r requirements.txt -r requirements-dev.txt
+          playwright install --with-deps chromium
+
+      - name: Run e2e tests
+        run: pytest tests/test_e2e.py
