@@ -177,7 +177,7 @@ def generate(restaurants, timestamp):
 
   <footer class="text-center text-gray-400 dark:text-gray-600 text-xs py-8 mt-6 space-y-1">
     <p>Aktualizováno {timestamp} &middot; indiani.ivomartisek.cz</p>
-    <p>Hladový jinde? Polední menu u Holandské na <a href="https://jidlo.ivomartisek.cz" class="font-medium text-saffron hover:underline">Tácku 🍽️</a></p>
+    <p class="text-sm pt-1">Polední menu u Holandské: <a href="https://jidlo.ivomartisek.cz" class="font-semibold text-saffron hover:underline">Tácek 🍽️</a></p>
   </footer>
 
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
