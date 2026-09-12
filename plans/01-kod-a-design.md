@@ -334,6 +334,3 @@ grep -c '<h3[^>]*>[^<]*&[^<]*</h3>' results/index.html  # 0
 - **Google ratingy u sedmi podniků** (Desi Dhaba, Light of India, obou
   Satyamů, Khaybaru, Royal Nepal Židenice a Dr. Indy Pub). Zůstávají `null`, protože se je nepodařilo ověřit z Googlu.
   Foodora a Firmy.cz mají jinou škálu, míchat je by pole rozbilo.
-- **Klub cestovatelů** (Veleslavínova 183/14). Firmy.cz ho vede jako indickou
-  restauraci, ale je to primárně libanonský podnik s cestovatelskými
-  přednáškami. Ivo má rozhodnout, jestli do seznamu patří.

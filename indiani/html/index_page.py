@@ -5,7 +5,7 @@ are."""
 import json
 import re
 from urllib.parse import quote_plus
-from indiani.html.assets import DARK_INIT, TAILWIND, THEME_CSS, THEME_JS
+from indiani.html.assets import DARK_INIT, TAILWIND, THEME_CSS, THEME_JS, EASTER_EGG_JS
 from indiani.facets import FACETS, FACET_ORDER, TOP_RATING
 from indiani.config import SITE_TITLE, SITE_TAGLINE, HERO_IMAGE, MAP_CENTER, MAP_ZOOM
 
@@ -175,6 +175,7 @@ def generate(restaurants, timestamp):
     <p id="noResults" style="display:none" class="text-center text-gray-400 dark:text-gray-500 py-10">Nic nenalezeno 🥲</p>
   </main>
 
+  <!-- Kdo dočetl až sem, zaslouží si nápovědu:  up up down down left right left right B A  -->
   <footer class="text-center text-gray-400 dark:text-gray-600 text-xs py-8 mt-6 space-y-1">
     <p>Aktualizováno {timestamp} &middot; indiani.ivomartisek.cz</p>
     <p class="text-sm pt-1">Polední menu u Holandské: <a href="https://jidlo.ivomartisek.cz" class="font-semibold text-saffron hover:underline">Tácek 🍽️</a></p>
@@ -319,6 +320,9 @@ def generate(restaurants, timestamp):
         nearBtn.textContent = '📍 Podle špendlíku';
       }}, _useBrnoCenter, {{timeout: 8000}});
     }});
+
+    /* ---- Easter egg (viz assets.EASTER_EGG_JS) ---- */
+    {EASTER_EGG_JS}
   </script>
 </body>
 </html>"""

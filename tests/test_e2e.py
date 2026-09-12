@@ -71,3 +71,23 @@ def test_location_far_snaps_to_brno(page):
     assert page.locator('[data-dist-label]:visible').count() > 0
     # The blue draggable user pin exists on the map.
     assert page.locator('.leaflet-marker-draggable').count() == 1
+
+
+def test_konami_easter_egg(page):
+    """Konami kód ukáže hlášku, spustí déšť kari a přepne na bufety."""
+    for key in ['ArrowUp', 'ArrowUp', 'ArrowDown', 'ArrowDown',
+                'ArrowLeft', 'ArrowRight', 'ArrowLeft', 'ArrowRight', 'b', 'a']:
+        page.keyboard.press(key)
+
+    page.wait_for_selector('.egg-toast', timeout=3000)
+    assert 'Namaste' in page.locator('.egg-toast').inner_text()
+    assert page.locator('.egg-drop').count() > 0, "neprší kari"
+
+    # Odměna za kód: zapne se filtr all you can eat.
+    vis = _visible(page)
+    n = vis.count()
+    assert n > 0
+    for i in range(n):
+        assert vis.nth(i).locator('.ayce-sticker').count() == 1
+
+    page.click('button[data-facet=""]')  # úklid pro případné další testy

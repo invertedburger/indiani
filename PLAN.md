@@ -68,11 +68,15 @@ Restaurace bez adresy se geokódují na střed města. Doplň jim `address` nebo
 
 ## Hotovo
 
-- Ověřený seznam 25 indických/nepálských podniků v Brně (+ Modřice).
-- Filtrační facety: all you can eat (sticker), polední menu, rozvoz, rating 4,5+.
+- Ověřený seznam 34 indických/nepálských podniků v Brně (+ Modřice),
+  všechny piny ověřené reverzním geokódováním (září 2026).
+- Filtrační facety: all you can eat (sticker) a rating 4,5+.
+  Pozor: `lunch` a `delivery` jsou v datech, ale ve `facets.py` chybí,
+  takže se chipy nevykreslí. Řeší Fáze 2 v `plans/01-kod-a-design.md`.
 - Google rating u karet (odkaz na recenze), řazení podle hodnocení.
 - Poloha: přetažitelný špendlík (GPS nebo ručně), vzdálenost + řazení.
 - Tmavý motiv, Esri Dark Gray mapa, teplý indický vzhled.
+- Easter egg: Konami kód spustí déšť kari a přepne na bufety.
 - Nasazeno na GitHub Pages (auto-deploy z `main`).
 
 ## Backlog / nápady

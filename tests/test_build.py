@@ -67,3 +67,17 @@ def test_sorted_by_rating(built):
     restaurants, _ = built
     ratings = [r.get('rating') or 0 for r in restaurants]
     assert ratings == sorted(ratings, reverse=True), "not sorted by rating desc"
+
+
+def test_easter_egg_present(built):
+    """Konami kód a jeho styly musí být ve vygenerované stránce."""
+    _, html = built
+    for token in ('egg-drop', 'egg-toast', "'arrowup','arrowup'", '@keyframes eggFall'):
+        assert token in html, token
+
+
+def test_easter_egg_does_not_add_chips(built):
+    """Easter egg nesmí do filtrů přidat vlastní facetu."""
+    _, html = built
+    facets = set(re.findall(r'data-facet="([^"]*)"', html))
+    assert facets == {'', '__top', 'ayce'}, facets

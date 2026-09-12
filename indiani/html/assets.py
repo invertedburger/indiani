@@ -94,6 +94,34 @@ THEME_CSS = """<style>
     }
     .price-badge { background: transparent; border: 1px solid #fbbf24; color: #b45309; }
     .dark .price-badge { border-color: #a16207; color: #fcd34d; }
+
+    /* Easter egg: déšť kari a hláška po zadání Konami kódu */
+    .egg-drop {
+      position: fixed; top: -48px; z-index: 9998;
+      pointer-events: none; user-select: none;
+      animation: eggFall linear forwards;
+    }
+    @keyframes eggFall {
+      to { transform: translateY(106vh) rotate(var(--spin, 360deg)); opacity: .1; }
+    }
+    .egg-toast {
+      position: fixed; left: 50%; bottom: 28px; z-index: 9999;
+      padding: 10px 18px; border-radius: 9999px;
+      background: #9a3412; color: #fff; font-size: 14px; font-weight: 700;
+      box-shadow: 0 6px 24px rgba(0,0,0,.35);
+      pointer-events: none; white-space: nowrap;
+      animation: eggToast 3.6s ease forwards;
+    }
+    @keyframes eggToast {
+      0%        { opacity: 0; transform: translate(-50%, 14px); }
+      12%, 78%  { opacity: 1; transform: translate(-50%, 0); }
+      100%      { opacity: 0; transform: translate(-50%, -10px); }
+    }
+    /* Kdo nechce animace, dostane jen hlášku. */
+    @media (prefers-reduced-motion: reduce) {
+      .egg-drop { display: none; }
+      .egg-toast { animation-duration: 3.6s; }
+    }
   </style>"""
 
 THEME_JS = """
@@ -108,4 +136,55 @@ THEME_JS = """
       _updateThemeBtn();
     });
     _updateThemeBtn();
+"""
+
+# Easter egg. Konami kód odemkne "režim all you can eat": prší kari a stránka
+# se přepne na bufety. Vtip je v tom, že cheat kód ti dá neomezené jídlo.
+# Žije tady, a ne v index_page.py, protože tohle není f-string a nemusí se
+# tedy zdvojovat složené závorky. Spoléhá na Set `active` z filtrování.
+EASTER_EGG_JS = """
+    (function() {
+      const CODE = ['arrowup','arrowup','arrowdown','arrowdown',
+                    'arrowleft','arrowright','arrowleft','arrowright','b','a'];
+      const FOOD = ['\\u{1F35B}', '\\u{1F958}', '\\u{1FAD3}', '\\u{1F336}',
+                    '\\u{1F35A}', '\\u{1F95F}', '\\u{1F9C4}', '\\u{1F362}'];
+      let step = 0, busy = false;
+
+      function rain() {
+        if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+        for (let n = 0; n < 60; n++) {
+          const d = document.createElement('div');
+          d.className = 'egg-drop';
+          d.textContent = FOOD[Math.floor(Math.random() * FOOD.length)];
+          d.style.left = (Math.random() * 98) + 'vw';
+          d.style.fontSize = (18 + Math.random() * 20) + 'px';
+          d.style.setProperty('--spin', (Math.random() * 720 - 360) + 'deg');
+          d.style.animationDuration = (2.6 + Math.random() * 2.4) + 's';
+          d.style.animationDelay = (Math.random() * 1.6) + 's';
+          d.addEventListener('animationend', () => d.remove());
+          document.body.appendChild(d);
+        }
+      }
+
+      function unlock() {
+        if (busy) return;
+        busy = true;
+        rain();
+        const t = document.createElement('div');
+        t.className = 'egg-toast';
+        t.textContent = '\\u{1F64F} Namaste! Odemkl jsi all you can eat';
+        t.addEventListener('animationend', () => t.remove());
+        document.body.appendChild(t);
+        // Odměna za kód: rovnou ukážeme, kde se dá najíst do sytosti.
+        const chip = document.querySelector('[data-facet="ayce"]');
+        if (chip && !active.has('ayce')) chip.click();
+        setTimeout(() => { busy = false; }, 6000);
+      }
+
+      document.addEventListener('keydown', e => {
+        const k = (e.key || '').toLowerCase();
+        step = (k === CODE[step]) ? step + 1 : (k === CODE[0] ? 1 : 0);
+        if (step === CODE.length) { step = 0; unlock(); }
+      });
+    })();
 """
