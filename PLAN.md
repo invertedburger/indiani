@@ -70,22 +70,26 @@ Restaurace bez adresy se geokódují na střed města. Doplň jim `address` nebo
 
 - Ověřený seznam 34 indických/nepálských podniků v Brně (+ Modřice),
   všechny piny ověřené reverzním geokódováním (září 2026).
-- Filtrační facety: all you can eat (sticker) a rating 4,5+.
-  Pozor: `lunch` a `delivery` jsou v datech, ale ve `facets.py` chybí,
-  takže se chipy nevykreslí. Řeší Fáze 2 v `plans/01-kod-a-design.md`.
+- Filtrační facety: all you can eat (sticker), polední menu, rozvoz,
+  rating 4,5+.
 - Google rating u karet (odkaz na recenze), řazení podle hodnocení.
 - Poloha: přetažitelný špendlík (GPS nebo ručně), vzdálenost + řazení.
 - Tmavý motiv, Esri Dark Gray mapa, teplý indický vzhled.
-- Easter egg: Konami kód spustí déšť kari a přepne na bufety.
+- Easter egg: napsat `iddqd` spustí déšť kari a přepne na bufety.
+- Popisky na kartách, hledání podle čtvrti, bez diakritiky a se skloňováním.
+- Shlukování pinů na mapě (Leaflet.markercluster).
+- Escapování HTML, geocache se invaliduje podle adresy.
+- Favicon, OG náhled, aria popisky, vše z jednoho CDN.
 - Nasazeno na GitHub Pages (auto-deploy z `main`).
 
 ## Backlog / nápady
 
 - **DNS pro indiani.ivomartisek.cz**: ve WEDOSu CNAME `indiani` ->
   `invertedburger.github.io`, pak custom doména v Pages.
-- Doplnit Google rating u osmi podniků, co mají `null` (Foodora a Firmy.cz
-  mají jinou škálu, nemíchat).
-- Otevírací doba a indikace "otevřeno teď".
-- Shlukování (cluster) hustých pinů v centru.
-- Náhledový obrázek pro sdílení (OG image) a favicon.
+- Doplnit Google rating u 11 podniků, co mají `null`, z toho 5 poboček
+  Satyamu (Foodora a Firmy.cz mají jinou škálu, nemíchat).
+- Otevírací doba a indikace "otevřeno teď". Nejužitečnější chybějící údaj,
+  ale znamená to ruční údržbu u 34 podniků.
 - Lunch ceny u nebufetových podniků (volitelné, mění se často).
+- Tailwind z play CDN píše do konzole varování, že není pro produkci.
+  Zbavit se ho znamená build step, což je proti záměru projektu.

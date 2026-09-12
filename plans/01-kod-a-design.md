@@ -1,5 +1,10 @@
 # Plán: kód a design (září 2026)
 
+> **Hotovo 12. 9. 2026.** Všech pět fází odpracováno, testů 30 a zelené.
+> Dokument zůstává jako záznam, proč se věci dělaly tak, jak se dělaly.
+> Co se při realizaci ukázalo jinak, než plán čekal, je poznamenané
+> u dané fáze.
+
 Rozfázovaná oprava kódu a designu webu Indiáni v Brně. Data v `restaurants.json`
 jsou už ověřená a opravená (30 podniků, září 2026), tenhle plán se jich netýká.
 
@@ -183,6 +188,15 @@ V prohlížeči (`serve.bat`): napiš do hledání `bohunice`, `zidenice`, `kren
 bez diakritiky. Každé musí něco najít. Klikni chip Rozvoz, musí zůstat 10 karet,
 chip Polední menu 4.
 
+### Jak to dopadlo
+
+Plán počítal s tím, že stačí přidat `note` do haystacku. Ukázalo se, že to
+nestačí: čeština skloňuje, v popiscích stojí "v Bohunicích", ale člověk hledá
+"Bohunice", takže shoda stejně nenastala. Doplněno zkoušení kmene dotazu.
+První pokus pouštěl kmen jen při nule výsledků, jenže pak "zidenice" našlo
+Royal Nepal Židenice a skrylo Jomsom, který je tam taky. Kmen se proto zkouší
+vždycky.
+
 ### Čeho se vyvarovat
 
 - Nepřidávej facet, který není v datech. `_filter_bar()` schválně kreslí jen ty,
@@ -230,6 +244,16 @@ grep -c 'MarkerCluster.css' results/index.html    # 1
 V prohlížeči: cluster bubliny se rozpadají při přiblížení, klik na cluster
 přizoomuje, klik na jednotlivý pin otevře popup s názvem, adresou a odkazem.
 Zkontroluj světlý i tmavý motiv, přepínání dlaždic nesmí clustery rozbít.
+
+### Jak to dopadlo
+
+`maxClusterRadius: 50` z plánu bylo pořád moc: 25 z 34 pinů se slilo do jedné
+bubliny a z mapy nebylo poznat vůbec nic. Po měření v reálné velikosti mapy
+(340 px na výšku) je nastaveno 25, což dá tři shluky a deset samostatných pinů.
+
+Navíc se ukázalo, že Leaflet řadí markery podle zeměpisné šířky, takže
+samostatný pin může skončit nad shlukem a sebrat mu klik. Shluky dostaly vyšší
+z-index. Odhalil to prohlížečový test, kterému klik vytimeoutoval.
 
 ### Čeho se vyvarovat
 
