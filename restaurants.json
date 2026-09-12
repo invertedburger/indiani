@@ -67,9 +67,9 @@
       "url": "https://nepalbrno.cz/",
       "tags": ["nepálská", "indická", "kari"],
       "rating": 4.5,
-      "attrs": [],
-      "price": "",
-      "note": "Autentická nepálská a indická kuchyně poblíž Veveří."
+      "attrs": ["ayce", "lunch"],
+      "price": "Bufet 189 Kč",
+      "note": "Autentická nepálská a indická kuchyně na Veveří, polední raut all you can eat Po-Pá 11-15."
     },
     {
       "name": "Restaurace Nepal",
