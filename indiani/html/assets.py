@@ -138,17 +138,17 @@ THEME_JS = """
     _updateThemeBtn();
 """
 
-# Easter egg. Konami kód odemkne "režim all you can eat": prší kari a stránka
-# se přepne na bufety. Vtip je v tom, že cheat kód ti dá neomezené jídlo.
+# Easter egg. Napsání "iddqd" (god mode z Doomu) odemkne "režim all you can
+# eat": prší kari a stránka se přepne na bufety. Nesmrtelnost se hodí, když
+# chceš jíst donekonečna.
 # Žije tady, a ne v index_page.py, protože tohle není f-string a nemusí se
 # tedy zdvojovat složené závorky. Spoléhá na Set `active` z filtrování.
 EASTER_EGG_JS = """
     (function() {
-      const CODE = ['arrowup','arrowup','arrowdown','arrowdown',
-                    'arrowleft','arrowright','arrowleft','arrowright','b','a'];
+      const CODE = 'iddqd';
       const FOOD = ['\\u{1F35B}', '\\u{1F958}', '\\u{1FAD3}', '\\u{1F336}',
                     '\\u{1F35A}', '\\u{1F95F}', '\\u{1F9C4}', '\\u{1F362}'];
-      let step = 0, busy = false;
+      let typed = '', busy = false;
 
       function rain() {
         if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
@@ -172,7 +172,7 @@ EASTER_EGG_JS = """
         rain();
         const t = document.createElement('div');
         t.className = 'egg-toast';
-        t.textContent = '\\u{1F64F} Namaste! Odemkl jsi all you can eat';
+        t.textContent = '\\u{1F64F} God mode: all you can eat';
         t.addEventListener('animationend', () => t.remove());
         document.body.appendChild(t);
         // Odměna za kód: rovnou ukážeme, kde se dá najíst do sytosti.
@@ -181,10 +181,12 @@ EASTER_EGG_JS = """
         setTimeout(() => { busy = false; }, 6000);
       }
 
+      // Posuvné okno posledních znaků, takže kód jde napsat kdekoliv,
+      // i do vyhledávacího políčka.
       document.addEventListener('keydown', e => {
-        const k = (e.key || '').toLowerCase();
-        step = (k === CODE[step]) ? step + 1 : (k === CODE[0] ? 1 : 0);
-        if (step === CODE.length) { step = 0; unlock(); }
+        if (!e.key || e.key.length !== 1) return;
+        typed = (typed + e.key.toLowerCase()).slice(-CODE.length);
+        if (typed === CODE) { typed = ''; unlock(); }
       });
     })();
 """

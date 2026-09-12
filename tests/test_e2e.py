@@ -73,14 +73,13 @@ def test_location_far_snaps_to_brno(page):
     assert page.locator('.leaflet-marker-draggable').count() == 1
 
 
-def test_konami_easter_egg(page):
-    """Konami kód ukáže hlášku, spustí déšť kari a přepne na bufety."""
-    for key in ['ArrowUp', 'ArrowUp', 'ArrowDown', 'ArrowDown',
-                'ArrowLeft', 'ArrowRight', 'ArrowLeft', 'ArrowRight', 'b', 'a']:
+def test_iddqd_easter_egg(page):
+    """Napsání iddqd ukáže hlášku, spustí déšť kari a přepne na bufety."""
+    for key in 'iddqd':
         page.keyboard.press(key)
 
     page.wait_for_selector('.egg-toast', timeout=3000)
-    assert 'Namaste' in page.locator('.egg-toast').inner_text()
+    assert 'God mode' in page.locator('.egg-toast').inner_text()
     assert page.locator('.egg-drop').count() > 0, "neprší kari"
 
     # Odměna za kód: zapne se filtr all you can eat.
