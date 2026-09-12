@@ -50,7 +50,7 @@ def test_map_links_point_to_coords(built):
 
 def test_map_links_wellformed(built):
     _, html = built
-    queries = re.findall(r'https://www\.google\.com/maps/search/\?api=1&query=([^"]+)', html)
+    queries = re.findall(r'https://www\.google\.com/maps/search/\?api=1&amp;query=([^"]+)', html)
     assert queries, "no map links found"
     for q in queries:
         assert q.strip(), "empty map query"
@@ -70,9 +70,9 @@ def test_sorted_by_rating(built):
 
 
 def test_easter_egg_present(built):
-    """Konami kód a jeho styly musí být ve vygenerované stránce."""
+    """Kód iddqd a jeho styly musí být ve vygenerované stránce."""
     _, html = built
-    for token in ('egg-drop', 'egg-toast', "'arrowup','arrowup'", '@keyframes eggFall'):
+    for token in ('egg-drop', 'egg-toast', "CODE = 'iddqd'", '@keyframes eggFall'):
         assert token in html, token
 
 

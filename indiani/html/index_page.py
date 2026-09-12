@@ -2,6 +2,7 @@
 cards (with facet badges, rating and the all-you-can-eat sticker) and a Leaflet
 map. Geolocation lets the visitor sort restaurants by distance from where they
 are."""
+import html
 import json
 import re
 from urllib.parse import quote_plus
@@ -31,6 +32,15 @@ def _card(r, i):
     attrs = r.get('attrs', [])
     rating = r.get('rating')
 
+    # Escaped copies for the markup. The raw values still feed quote_plus(),
+    # which does its own URL encoding. Several names carry a bare '&'
+    # ("Indian & Nepal Restaurant Buddha"), and a stray apostrophe or quote in
+    # the data would otherwise break the attributes around it.
+    e_name = html.escape(name)
+    e_addr = html.escape(_short_addr(address))
+    e_url = html.escape(url)
+    e_price = html.escape(price)
+
     has_ayce = 'ayce' in attrs
     sticker = (f'<div class="ayce-sticker" style="background-image:url(\'{AYCE_IMG}\')" '
                f'title="All you can eat"></div>') if has_ayce else ''
@@ -41,12 +51,12 @@ def _card(r, i):
     if rating:
         reviews_q = quote_plus(f'{name} {address}')
         rating_chip = (
-            f'<a href="https://www.google.com/maps/search/?api=1&query={reviews_q}" target="_blank" '
+            f'<a href="https://www.google.com/maps/search/?api=1&amp;query={reviews_q}" target="_blank" '
             f'rel="noopener" class="rating" title="Hodnocení na Google">⭐ {str(rating).replace(".", ",")}</a>'
         )
 
     # Concrete price (e.g. buffet price) instead of $ symbols.
-    price_badge = f'<span class="fbadge price-badge">💰 {price}</span>' if price else ''
+    price_badge = f'<span class="fbadge price-badge">💰 {e_price}</span>' if price else ''
 
     # The essentials only: rating and, for buffets, the price. (AYCE itself is
     # the corner sticker.)
@@ -67,16 +77,16 @@ def _card(r, i):
     else:
         map_query = quote_plus(f'{name} {address}')
     links = (
-        f'<a href="https://www.google.com/maps/search/?api=1&query={map_query}" target="_blank" rel="noopener" '
+        f'<a href="https://www.google.com/maps/search/?api=1&amp;query={map_query}" target="_blank" rel="noopener" '
         f'class="btn-act btn-map">{pin_svg} Mapa</a>'
     )
     if url:
         links += (
-            f'<a href="{url}" target="_blank" rel="noopener" '
+            f'<a href="{e_url}" target="_blank" rel="noopener" '
             f'class="btn-act btn-web">{globe_svg} Web</a>'
         )
 
-    haystack = ' '.join([name, address] + tags).lower()
+    haystack = html.escape(' '.join([name, address] + tags).lower())
     lat = r['coords'][0] if r.get('coords') else ''
     lng = r['coords'][1] if r.get('coords') else ''
 
@@ -88,9 +98,9 @@ def _card(r, i):
         {sticker}
         <div class="px-5 pt-5 pb-4 flex flex-col gap-2 flex-1">
           <div class="pr-16">
-            <h3 class="font-bold text-gray-800 dark:text-orange-50 leading-tight">{name}</h3>
+            <h3 class="font-bold text-gray-800 dark:text-orange-50 leading-tight">{e_name}</h3>
             <div class="flex items-center gap-2 mt-0.5">
-              <p class="text-xs text-gray-500 dark:text-gray-400 truncate">{_short_addr(address)}</p>
+              <p class="text-xs text-gray-500 dark:text-gray-400 truncate">{e_addr}</p>
               <span class="dist" data-dist-label style="display:none"></span>
             </div>
           </div>
@@ -122,7 +132,8 @@ def generate(restaurants, timestamp):
 
     with_coords = [r for r in restaurants if r.get('coords')]
     markers_js = json.dumps([
-        {'n': r['name'], 'a': r.get('address', ''), 'u': r.get('url', ''),
+        {'n': html.escape(r['name']), 'a': html.escape(r.get('address', '')),
+         'u': html.escape(r.get('url', '')),
          'lat': r['coords'][0], 'lng': r['coords'][1]}
         for r in with_coords
     ], ensure_ascii=False)
@@ -175,7 +186,7 @@ def generate(restaurants, timestamp):
     <p id="noResults" style="display:none" class="text-center text-gray-400 dark:text-gray-500 py-10">Nic nenalezeno 🥲</p>
   </main>
 
-  <!-- Kdo dočetl až sem, zaslouží si nápovědu:  up up down down left right left right B A  -->
+  <!-- Kdo dočetl až sem, zaslouží si nápovědu:  iddqd  -->
   <footer class="text-center text-gray-400 dark:text-gray-600 text-xs py-8 mt-6 space-y-1">
     <p>Aktualizováno {timestamp} &middot; indiani.ivomartisek.cz</p>
     <p class="text-sm pt-1">Polední menu u Holandské: <a href="https://jidlo.ivomartisek.cz" class="font-semibold text-saffron hover:underline">Tácek 🍽️</a></p>
