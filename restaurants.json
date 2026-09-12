@@ -310,6 +310,36 @@
       "attrs": ["lunch", "delivery"],
       "price": "",
       "note": "Indická restaurace u Mendlova náměstí, polední menu Po-Pá 11-15."
+    },
+    {
+      "name": "Satyam (OC Letmo)",
+      "address": "Nádražní 681/2a, 602 00 Brno",
+      "url": "https://satyam.cz/",
+      "tags": ["indická"],
+      "rating": null,
+      "attrs": [],
+      "price": "",
+      "note": "Pobočka sítě Satyam v OC Letmo u hlavního nádraží."
+    },
+    {
+      "name": "Satyam (Futurum)",
+      "address": "Vídeňská 132/100, 619 00 Brno",
+      "url": "https://satyam.cz/",
+      "tags": ["indická"],
+      "rating": null,
+      "attrs": [],
+      "price": "",
+      "note": "Pobočka sítě Satyam ve Futurum Brno."
+    },
+    {
+      "name": "Satyam (NC Královo Pole)",
+      "address": "Cimburkova 4, 612 00 Brno",
+      "url": "https://satyam.cz/",
+      "tags": ["indická"],
+      "rating": null,
+      "attrs": [],
+      "price": "",
+      "note": "Pobočka sítě Satyam v NC Královo Pole."
     }
   ]
 }
