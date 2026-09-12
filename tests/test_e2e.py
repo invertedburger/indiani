@@ -90,3 +90,33 @@ def test_iddqd_easter_egg(page):
         assert vis.nth(i).locator('.ayce-sticker').count() == 1
 
     page.click('button[data-facet=""]')  # úklid pro případné další testy
+
+
+def test_search_without_diacritics(page):
+    """Čech bez háčků musí najít Křenovou i Židenice."""
+    for term, expect in [('krenova', 2), ('zidenice', 2), ('modrice', 1)]:
+        page.fill('#search', term)
+        assert _visible(page).count() == expect, f'{term}: {_visible(page).count()}'
+    page.fill('#search', '')
+
+
+def test_search_handles_czech_declension(page):
+    """Popisky mají "v Bohunicích", lidé píšou "Bohunice". Musí to najít,
+    a to všechny podniky ve čtvrti, ne jen ten, co ji má v názvu."""
+    for term in ['bohunice', 'slatina', 'zidenice', 'kralovo pole']:
+        page.fill('#search', term)
+        assert _visible(page).count() > 0, f'{term} nenašlo nic'
+    page.fill('#search', 'uplnenesmysl')
+    assert _visible(page).count() == 0, 'nesmysl nesmí projít přes kmenovou zálohu'
+    page.fill('#search', '')
+
+
+def test_delivery_facet_filters(page):
+    """Facet rozvoz byl mrtvý, teď musí filtrovat."""
+    page.click('button[data-facet="delivery"]')
+    vis = _visible(page)
+    n = vis.count()
+    assert n > 0
+    for i in range(n):
+        assert 'delivery' in (vis.nth(i).get_attribute('data-attrs') or '')
+    page.click('button[data-facet=""]')

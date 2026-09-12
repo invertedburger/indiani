@@ -17,13 +17,14 @@ TAILWIND = (
 # Custom CSS: hero banner, mandala divider, card hover, tag chips, marker pulse.
 THEME_CSS = """<style>
     body { font-family: ui-sans-serif, system-ui, 'Segoe UI', sans-serif; }
-    /* Descriptive tags: subtle ghost chips so they stay behind the feature badges. */
-    .tag {
-      display: inline-block; padding: 1px 8px; border-radius: 9999px;
-      font-size: 11px; font-weight: 500;
-      background: transparent; border: 1px solid #fed7aa; color: #b45309;
+    /* Popisek na kartě: dva řádky, zbytek se ořízne. Odliší pobočky,
+       které mají skoro stejný název (2x Namaskar, 2x Sargam, 5x Satyam). */
+    .note {
+      font-size: 12px; line-height: 1.45; color: #78716c;
+      display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical;
+      overflow: hidden;
     }
-    .dark .tag { border-color: #7c2d12; color: #fdba74; }
+    .dark .note { color: #a8a29e; }
     .card {
       transition: box-shadow .2s ease, transform .2s ease, border-color .2s ease;
     }
@@ -123,6 +124,13 @@ THEME_CSS = """<style>
       .egg-toast { animation-duration: 3.6s; }
     }
   </style>"""
+
+# Hledání bez ohledu na diakritiku: "Krenova" najde "Křenovou". Stejná
+# normalizace se dělá i v Pythonu nad data-search (index_page._fold).
+FOLD_JS = r"""
+    const _fold = s => (s || '').normalize('NFD')
+      .replace(/[\u0300-\u036f]/g, '').toLowerCase();
+"""
 
 THEME_JS = """
     const themeBtn = document.getElementById('themeBtn');

@@ -5,13 +5,23 @@ are."""
 import html
 import json
 import re
+import unicodedata
 from urllib.parse import quote_plus
-from indiani.html.assets import DARK_INIT, TAILWIND, THEME_CSS, THEME_JS, EASTER_EGG_JS
+from indiani.html.assets import (
+    DARK_INIT, TAILWIND, THEME_CSS, THEME_JS, FOLD_JS, EASTER_EGG_JS,
+)
 from indiani.facets import FACETS, FACET_ORDER, TOP_RATING
 from indiani.config import SITE_TITLE, SITE_TAGLINE, HERO_IMAGE, MAP_CENTER, MAP_ZOOM
 
 AYCE_IMG = 'ayce.png'
 _POSTAL = re.compile(r'\s*\d{3}\s?\d{2}\s*')
+
+
+def _fold(s):
+    """Lowercase and strip diacritics, so typing "Krenova" finds "Křenová".
+    The same folding runs on the query in the browser (assets.FOLD_JS)."""
+    return ''.join(c for c in unicodedata.normalize('NFD', s)
+                   if not unicodedata.combining(c)).lower()
 
 
 def _short_addr(a):
@@ -28,6 +38,7 @@ def _card(r, i):
     address = r.get('address', '')
     url = r.get('url', '')
     price = r.get('price', '')
+    note = r.get('note', '')
     tags = r.get('tags', [])
     attrs = r.get('attrs', [])
     rating = r.get('rating')
@@ -40,6 +51,7 @@ def _card(r, i):
     e_addr = html.escape(_short_addr(address))
     e_url = html.escape(url)
     e_price = html.escape(price)
+    e_note = html.escape(note)
 
     has_ayce = 'ayce' in attrs
     sticker = (f'<div class="ayce-sticker" style="background-image:url(\'{AYCE_IMG}\')" '
@@ -58,9 +70,13 @@ def _card(r, i):
     # Concrete price (e.g. buffet price) instead of $ symbols.
     price_badge = f'<span class="fbadge price-badge">💰 {e_price}</span>' if price else ''
 
-    # The essentials only: rating and, for buffets, the price. (AYCE itself is
-    # the corner sticker.)
-    chips = rating_chip + price_badge
+    # Facet badges for everything except ayce, which is the corner sticker.
+    facet_badges = ''.join(
+        f'<span class="fbadge {FACETS[k]["cls"]}">{FACETS[k]["emoji"]} {FACETS[k]["label"]}</span>'
+        for k in FACET_ORDER if k in attrs and k != 'ayce' and k in FACETS
+    )
+
+    chips = rating_chip + price_badge + facet_badges
     chips_html = f'<div class="flex flex-wrap items-center gap-1.5">{chips}</div>' if chips else ''
 
     pin_svg = ('<svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">'
@@ -86,7 +102,11 @@ def _card(r, i):
             f'class="btn-act btn-web">{globe_svg} Web</a>'
         )
 
-    haystack = html.escape(' '.join([name, address] + tags).lower())
+    haystack = html.escape(_fold(' '.join([name, address, note] + tags)))
+    # Nálepka all you can eat zabírá pravý horní roh, takže jen tam se musí
+    # popisek zúžit. Ostatní karty ho můžou roztáhnout přes celou šířku.
+    note_pad = ' pr-16' if has_ayce else ''
+    note_html = f'<p class="note{note_pad}">{e_note}</p>' if note else ''
     lat = r['coords'][0] if r.get('coords') else ''
     lng = r['coords'][1] if r.get('coords') else ''
 
@@ -104,6 +124,7 @@ def _card(r, i):
               <span class="dist" data-dist-label style="display:none"></span>
             </div>
           </div>
+          {note_html}
           {chips_html}
         </div>
         <div class="px-5 py-3 border-t border-orange-50 dark:border-orange-900/30 flex items-center gap-2">
@@ -175,7 +196,7 @@ def generate(restaurants, timestamp):
     </section>
 
     <div class="mb-3">
-      <input id="search" type="search" placeholder="Hledat název nebo čtvrť…"
+      <input id="search" type="search" placeholder="Hledat název, ulici nebo čtvrť…"
              class="w-full px-3 py-2 text-sm rounded-lg border border-orange-200 dark:border-orange-900/50 bg-white dark:bg-[#241a13] text-gray-800 dark:text-orange-50 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-saffron"/>
     </div>
     {filter_bar}
@@ -195,6 +216,7 @@ def generate(restaurants, timestamp):
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
   <script>
     {THEME_JS}
+    {FOLD_JS}
 
     /* ---- Map ---- */
     let _map;
@@ -233,13 +255,22 @@ def generate(restaurants, timestamp):
     const search = document.getElementById('search');
     const chips = [...document.querySelectorAll('[data-facet]')];
 
-    function applyFilters() {{
-      const q = (search.value || '').trim().toLowerCase();
+    // Čeština skloňuje: v popiscích stojí "v Bohunicích" a "ve Slatině", ale
+    // člověk napíše "Bohunice", "Slatina". Kromě přesné shody proto zkoušíme
+    // i kmen dotazu, takže hledání čtvrti najde všechny podniky v ní, ne jen
+    // ten, co ji má náhodou v názvu.
+    const STEM = 5;
+    function _hit(hay, q) {{
+      if (hay.includes(q)) return true;
+      return q.length > STEM && hay.includes(q.slice(0, STEM));
+    }}
+
+    function _pass(q) {{
       let shown = 0;
       document.querySelectorAll('[data-search]').forEach(el => {{
         const attrs = (el.dataset.attrs || '').split(' ');
         const rating = parseFloat(el.dataset.rating || '0');
-        let ok = el.dataset.search.includes(q);
+        let ok = _hit(el.dataset.search, q);
         active.forEach(f => {{
           if (f === '__top') {{ if (rating < {TOP_RATING}) ok = false; }}
           else if (!attrs.includes(f)) ok = false;
@@ -247,6 +278,11 @@ def generate(restaurants, timestamp):
         el.style.display = ok ? '' : 'none';
         if (ok) shown++;
       }});
+      return shown;
+    }}
+
+    function applyFilters() {{
+      const shown = _pass(_fold((search.value || '').trim()));
       document.getElementById('noResults').style.display = shown ? 'none' : '';
     }}
 

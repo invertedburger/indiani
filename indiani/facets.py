@@ -15,10 +15,20 @@ FACETS = {
         'label': 'All you can eat',
         'cls': 'bg-amber-100 text-amber-800 dark:bg-amber-900/40 dark:text-amber-300',
     },
+    'lunch': {
+        'emoji': '🍲',
+        'label': 'Polední menu',
+        'cls': 'bg-orange-100 text-orange-800 dark:bg-orange-900/40 dark:text-orange-300',
+    },
+    'delivery': {
+        'emoji': '🛵',
+        'label': 'Rozvoz',
+        'cls': 'bg-lime-100 text-lime-800 dark:bg-lime-900/40 dark:text-lime-300',
+    },
 }
 
 # Order in which chips/badges are rendered.
-FACET_ORDER = ['ayce']
+FACET_ORDER = ['ayce', 'lunch', 'delivery']
 
 # Rating threshold for the "Top hodnocené" filter chip.
 TOP_RATING = 4.5
