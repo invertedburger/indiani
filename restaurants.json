@@ -1,5 +1,5 @@
 {
-  "_comment": "Indické a indicko-nepálské restaurace v Brně. Adresy a fakta ověřené přes Firmy.cz, weby podniků a recenze (červen 2026). 'attrs' = filtrovatelné facety (viz indiani/facets.py): ayce, lunch, delivery. 'rating' = přibližné Google hodnocení (ručně udržované, null = neověřeno). 'price' = konkrétní cena bufetu (jen u AYCE). Souřadnice se cachují v results/coords.json.",
+  "_comment": "Indické a indicko-nepálské restaurace v Brně. Adresy a fakta ověřené přes Firmy.cz, weby podniků a recenze (ověřeno září 2026). 'attrs' = filtrovatelné facety (viz indiani/facets.py): ayce, lunch, delivery. 'rating' = přibližné Google hodnocení (ručně udržované, null = neověřeno). 'price' = konkrétní cena bufetu (jen u AYCE). Souřadnice se cachují v results/coords.json.",
   "restaurants": [
     {
       "name": "Padagali",
@@ -33,7 +33,7 @@
     },
     {
       "name": "Everest Nepalese & Indian Restaurant",
-      "address": "Veveří 61, 602 00 Brno",
+      "address": "Veveří 489/61, 602 00 Brno",
       "url": "https://www.everestbrno.cz/",
       "tags": ["nepálská", "indická", "momo"],
       "rating": 4.5,
@@ -83,7 +83,7 @@
     },
     {
       "name": "Nepal India Thali",
-      "address": "třída Kpt. Jaroše 13, 602 00 Brno",
+      "address": "třída Kpt. Jaroše 1932/13, 602 00 Brno",
       "url": "https://www.indiathali.cz/",
       "tags": ["indická", "nepálská", "thali"],
       "rating": 4.5,
@@ -147,7 +147,7 @@
       "url": "",
       "tags": ["indická", "thali"],
       "rating": 4.4,
-      "attrs": [],
+      "attrs": ["delivery"],
       "price": "",
       "note": "Indická kuchyně v Bohunicích u kampusu."
     },
@@ -173,21 +173,21 @@
     },
     {
       "name": "Golden Nepal",
-      "address": "Lidická 2006/26, 602 00 Brno",
+      "address": "Křenová 19, 602 00 Brno",
       "url": "https://www.mount-everest.cz/golden-nepal/",
       "tags": ["nepálská", "indická"],
       "rating": 4.4,
       "attrs": ["ayce", "lunch", "delivery"],
       "price": "Bufet 185 Kč",
-      "note": "Nepálská a indická restaurace u bývalé Mosilany, bufet all you can eat, rozvoz přes Wolt."
+      "note": "Nepálská a indická restaurace v areálu bývalé Mosilany, bufet all you can eat, rozvoz přes Wolt."
     },
     {
       "name": "Desi Dhaba",
       "address": "Marešova 306/16, 602 00 Brno",
-      "url": "",
+      "url": "https://desidhaba.cz/",
       "tags": ["indická", "dhaba", "street food"],
       "rating": null,
-      "attrs": [],
+      "attrs": ["delivery"],
       "price": "",
       "note": "Indický street food ve stylu dhaba."
     },
@@ -213,7 +213,7 @@
     },
     {
       "name": "Light of India",
-      "address": "Štefánikova 35, 602 00 Brno",
+      "address": "Štefánikova 105/35, 602 00 Brno",
       "url": "http://www.lightofindia.cz/",
       "tags": ["indická"],
       "rating": null,
@@ -232,14 +232,14 @@
       "note": "Druhá pobočka Namaskaru na Smetanově."
     },
     {
-      "name": "Satyam",
+      "name": "Satyam (Olympia Modřice)",
       "address": "U Dálnice 777, 664 42 Modřice",
-      "url": "",
+      "url": "https://satyam.cz/",
       "tags": ["indická"],
       "rating": null,
       "attrs": [],
       "price": "",
-      "note": "Indická kuchyně v Modřicích (Brno-venkov)."
+      "note": "Indický fast food v Olympii Modřice (Brno-venkov)."
     },
     {
       "name": "Restaurace Pokhara",
@@ -260,6 +260,56 @@
       "attrs": [],
       "price": "",
       "note": "Nepálská a indická restaurace v Králově Poli."
+    },
+    {
+      "name": "Restaurace Khaybar",
+      "address": "Slepá 1324/27, 613 00 Brno",
+      "url": "https://khaybar.metro.rest/",
+      "tags": ["indická", "nepálská"],
+      "rating": null,
+      "attrs": ["delivery"],
+      "price": "",
+      "note": "Indická a nepálská kuchyně v Černých Polích, rozvoz přes Wolt."
+    },
+    {
+      "name": "Royal Nepal (Židenice)",
+      "address": "Geislerova 305/34, 615 00 Brno",
+      "url": "https://www.royalnepal.cz/zidenice/cz/home.html",
+      "tags": ["nepálská", "indická"],
+      "rating": null,
+      "attrs": ["delivery"],
+      "price": "",
+      "note": "Druhá pobočka Royal Nepalu v Židenicích, otevřená 2024."
+    },
+    {
+      "name": "Dr. Indy Pub & Indian Grill",
+      "address": "Čeňka Růžičky 805/12a, 625 00 Brno",
+      "url": "https://drindy.cz/cs/",
+      "tags": ["indická", "kari"],
+      "rating": null,
+      "attrs": ["ayce", "lunch"],
+      "price": "",
+      "note": "Indický grill a pivnice v Bohunicích, polední bufet Po-Pá 11-15."
+    },
+    {
+      "name": "Satyam (Křížkovského)",
+      "address": "Křížkovského 300/33, 603 00 Brno",
+      "url": "https://satyam.cz/",
+      "tags": ["indická"],
+      "rating": null,
+      "attrs": [],
+      "price": "",
+      "note": "Hlavní restaurace sítě Satyam na Starém Brně."
+    },
+    {
+      "name": "New Bambay",
+      "address": "Úvoz 466/8, 602 00 Brno",
+      "url": "https://www.facebook.com/newbambay.cz/",
+      "tags": ["indická"],
+      "rating": null,
+      "attrs": ["lunch", "delivery"],
+      "price": "",
+      "note": "Indická restaurace u Mendlova náměstí, polední menu Po-Pá 11-15."
     }
   ]
 }

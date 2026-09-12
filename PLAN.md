@@ -79,8 +79,8 @@ Restaurace bez adresy se geokódují na střed města. Doplň jim `address` nebo
 
 - **DNS pro indiani.ivomartisek.cz**: ve WEDOSu CNAME `indiani` ->
   `invertedburger.github.io`, pak custom doména v Pages.
-- Doplnit rating Desi Dhaba a Satyam (zatím `null`, neověřeno).
-- Ověřit, jestli Flavours ještě funguje (Foursquare ho měl jako zavřený).
+- Doplnit Google rating u osmi podniků, co mají `null` (Foodora a Firmy.cz
+  mají jinou škálu, nemíchat).
 - Otevírací doba a indikace "otevřeno teď".
 - Shlukování (cluster) hustých pinů v centru.
 - Náhledový obrázek pro sdílení (OG image) a favicon.
