@@ -120,3 +120,13 @@ def test_delivery_facet_filters(page):
     for i in range(n):
         assert 'delivery' in (vis.nth(i).get_attribute('data-attrs') or '')
     page.click('button[data-facet=""]')
+
+
+def test_map_clusters_and_expands(page):
+    """Piny se shlukují a klik na shluk je rozbalí."""
+    clusters = page.locator('.marker-cluster')
+    assert clusters.count() > 0, 'mapa neshlukuje'
+    before = page.locator('.leaflet-marker-icon').count()
+    clusters.first.click()
+    page.wait_for_timeout(1200)
+    assert page.locator('.leaflet-marker-icon').count() != before, 'shluk se nerozbalil'

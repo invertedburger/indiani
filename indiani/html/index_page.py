@@ -171,6 +171,8 @@ def generate(restaurants, timestamp):
   {DARK_INIT}
   {TAILWIND}
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet.markercluster/1.5.3/MarkerCluster.css"/>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet.markercluster/1.5.3/MarkerCluster.Default.css"/>
   {THEME_CSS}
 </head>
 <body class="bg-orange-50 dark:bg-[#1c1410] min-h-screen text-gray-800 dark:text-orange-50">
@@ -214,6 +216,7 @@ def generate(restaurants, timestamp):
   </footer>
 
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet.markercluster/1.5.3/leaflet.markercluster.js"></script>
   <script>
     {THEME_JS}
     {FOLD_JS}
@@ -241,13 +244,22 @@ def generate(restaurants, timestamp):
         iconSize:[32,32], iconAnchor:[16,32], popupAnchor:[0,-30]
       }});
       const rs = {markers_js};
+      // 34 pinů se v centru překrývá: na Křenové jsou dva ~350 m od sebe,
+      // na Veveří čtyři. Cluster je drží pohromadě a rozbalí při přiblížení.
+      // Poloměr 25 místo výchozích 80: při 50 se slilo 25 z 34 pinů do jedné
+      // bubliny a z mapy nebylo poznat vůbec nic. S 25 vyjdou tři shluky
+      // a deset samostatných pinů, takže je vidět rozložení po městě.
+      const cluster = L.markerClusterGroup({{maxClusterRadius: 25, showCoverageOnHover: false}});
       rs.forEach(r => {{
         const web = r.u ? '<br><a href="'+r.u+'" target="_blank" style="color:#ea580c;font-size:12px">🌐 Web ↗</a>' : '';
-        L.marker([r.lat, r.lng], {{icon}}).addTo(_map)
-          .bindPopup('<b style="font-size:13px">'+r.n+'</b><br><span style="font-size:11px;color:#666">'+r.a+'</span>'+web);
+        cluster.addLayer(
+          L.marker([r.lat, r.lng], {{icon}})
+            .bindPopup('<b style="font-size:13px">'+r.n+'</b><br><span style="font-size:11px;color:#666">'+r.a+'</span>'+web)
+        );
       }});
+      _map.addLayer(cluster);
       // Fit every pin in view (pins span the centre plus Modřice, Slatina, Královo Pole).
-      if (rs.length) _map.fitBounds(rs.map(r => [r.lat, r.lng]), {{padding:[55,55], maxZoom:14}});
+      if (rs.length) _map.fitBounds(rs.map(r => [r.lat, r.lng]), {{padding:[55,55], maxZoom:13}});
     }})();
 
     /* ---- Filtering: search + facet chips + rating ---- */

@@ -14,7 +14,8 @@ TAILWIND = (
     "saffron:'#ea580c',curry:'#b45309',masala:'#9a3412',gold:'#f59e0b'}}}}</script>"
 )
 
-# Custom CSS: hero banner, mandala divider, card hover, tag chips, marker pulse.
+# Custom CSS: mandala divider, card hover, popisky, filtrační chipy,
+# shluky pinů na mapě a easter egg.
 THEME_CSS = """<style>
     body { font-family: ui-sans-serif, system-ui, 'Segoe UI', sans-serif; }
     /* Popisek na kartě: dva řádky, zbytek se ořízne. Odliší pobočky,
@@ -42,6 +43,27 @@ THEME_CSS = """<style>
       opacity: .85;
     }
     .leaflet-popup-content-wrapper { border-radius: 12px; }
+
+    /* Shluky pinů. Výchozí styl markerclusteru je modrozelený, tohle ho
+       přebarvuje do stejné palety jako špendlíky. */
+    .marker-cluster {
+      background: rgba(234, 88, 12, .28);
+      border-radius: 50%;
+      /* Leaflet řadí markery podle zeměpisné šířky, takže samostatný pin může
+         skončit nad shlukem a sebrat mu klik. Shluk zastupuje víc podniků,
+         patří tedy nahoru. */
+      z-index: 650 !important;
+    }
+    .marker-cluster div {
+      background: #ea580c; color: #fff;
+      width: 32px; height: 32px; margin-left: 4px; margin-top: 4px;
+      border-radius: 50%; border: 2px solid #fff;
+      display: flex; align-items: center; justify-content: center;
+      font: 700 13px/1 ui-sans-serif, system-ui, 'Segoe UI', sans-serif;
+      box-shadow: 0 2px 8px rgba(0,0,0,.35);
+    }
+    .marker-cluster-medium div { background: #c2410c; }
+    .marker-cluster-large div  { background: #9a3412; }
 
     /* Filter chips */
     .chip {
@@ -96,7 +118,7 @@ THEME_CSS = """<style>
     .price-badge { background: transparent; border: 1px solid #fbbf24; color: #b45309; }
     .dark .price-badge { border-color: #a16207; color: #fcd34d; }
 
-    /* Easter egg: déšť kari a hláška po zadání Konami kódu */
+    /* Easter egg: déšť kari a hláška po napsání iddqd */
     .egg-drop {
       position: fixed; top: -48px; z-index: 9998;
       pointer-events: none; user-select: none;
