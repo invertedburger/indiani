@@ -58,7 +58,7 @@ def test_all_data_facets_are_rendered(built):
 def test_notes_rendered_and_searchable(built):
     """The curated note must reach both the card and the search haystack."""
     restaurants, html = built
-    assert html.count('class="note mt-1"') == sum(1 for r in restaurants if r.get('note'))
+    assert html.count('class="note') == sum(1 for r in restaurants if r.get('note'))
     haystacks = ' '.join(re.findall(r'data-search="([^"]*)"', html))
     assert 'kralovo pole' in haystacks, 'district from note missing in haystack'
     assert 'krenova' in haystacks, 'haystack is not diacritics-folded'
