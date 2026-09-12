@@ -11,7 +11,9 @@ from indiani.html.assets import (
     DARK_INIT, TAILWIND, THEME_CSS, THEME_JS, FOLD_JS, EASTER_EGG_JS,
 )
 from indiani.facets import FACETS, FACET_ORDER, TOP_RATING
-from indiani.config import SITE_TITLE, SITE_TAGLINE, HERO_IMAGE, MAP_CENTER, MAP_ZOOM
+from indiani.config import (
+    SITE_TITLE, SITE_TAGLINE, DOMAIN, HERO_IMAGE, MAP_CENTER, MAP_ZOOM,
+)
 
 AYCE_IMG = 'ayce.png'
 _POSTAL = re.compile(r'\s*\d{3}\s?\d{2}\s*')
@@ -136,13 +138,15 @@ def _card(r, i):
 def _filter_bar(restaurants):
     present = {k for r in restaurants for k in r.get('attrs', [])}
     has_rating = any(r.get('rating') for r in restaurants)
-    chips = ['<button class="chip chip-on" data-facet="">Vše</button>']
+    chips = ['<button type="button" class="chip chip-on" data-facet="" aria-pressed="true">Vše</button>']
     for k in FACET_ORDER:
         if k in present and k in FACETS:
             f = FACETS[k]
-            chips.append(f'<button class="chip chip-off" data-facet="{k}">{f["emoji"]} {f["label"]}</button>')
+            chips.append(f'<button type="button" class="chip chip-off" data-facet="{k}" '
+                         f'aria-pressed="false">{f["emoji"]} {f["label"]}</button>')
     if has_rating:
-        chips.append(f'<button class="chip chip-off" data-facet="__top">⭐ {str(TOP_RATING).replace(".", ",")}+</button>')
+        chips.append(f'<button type="button" class="chip chip-off" data-facet="__top" '
+                         f'aria-pressed="false">⭐ {str(TOP_RATING).replace(".", ",")}+</button>')
     chips.append('<button id="nearBtn" class="chip chip-off" type="button">📍 Nejblíž u mě</button>')
     return '<div class="flex flex-wrap gap-2 mb-4">' + ''.join(chips) + '</div>'
 
@@ -168,9 +172,16 @@ def generate(restaurants, timestamp):
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>{SITE_TITLE}</title>
   <meta name="description" content="{SITE_TAGLINE}">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🍛</text></svg>">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="{SITE_TITLE}">
+  <meta property="og:description" content="{SITE_TAGLINE}">
+  <meta property="og:url" content="https://{DOMAIN}/">
+  <meta property="og:image" content="https://{DOMAIN}/{HERO_IMAGE}">
+  <meta name="twitter:card" content="summary_large_image">
   {DARK_INIT}
   {TAILWIND}
-  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css"/>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet.markercluster/1.5.3/MarkerCluster.css"/>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet.markercluster/1.5.3/MarkerCluster.Default.css"/>
   {THEME_CSS}
@@ -179,8 +190,9 @@ def generate(restaurants, timestamp):
 
   <header class="max-w-3xl mx-auto px-4 pt-4">
     <div class="relative rounded-2xl overflow-hidden shadow-md">
-      <img src="{HERO_IMAGE}" alt="{SITE_TITLE}" class="w-full block">
-      <button id="themeBtn" title="Přepnout motiv"
+      <img src="{HERO_IMAGE}" alt="{SITE_TITLE}" width="1760" height="576"
+           decoding="async" class="w-full h-auto block">
+      <button id="themeBtn" type="button" title="Přepnout motiv" aria-label="Přepnout světlý a tmavý motiv"
               class="absolute top-3 right-3 w-9 h-9 flex items-center justify-center rounded-full bg-black/35 text-white backdrop-blur hover:bg-black/55 transition-colors"></button>
     </div>
   </header>
@@ -194,7 +206,7 @@ def generate(restaurants, timestamp):
     </div>
 
     <section class="mb-6">
-      <div id="map" class="rounded-2xl overflow-hidden border border-orange-100 dark:border-orange-900/40 shadow-sm" style="height:340px"></div>
+      <div id="map" role="region" aria-label="Mapa indických restaurací v Brně" class="rounded-2xl overflow-hidden border border-orange-100 dark:border-orange-900/40 shadow-sm" style="height:340px"></div>
     </section>
 
     <div class="mb-3">
@@ -206,7 +218,7 @@ def generate(restaurants, timestamp):
     <div id="cards-grid" class="grid sm:grid-cols-2 gap-3">
       {cards_html}
     </div>
-    <p id="noResults" style="display:none" class="text-center text-gray-400 dark:text-gray-500 py-10">Nic nenalezeno 🥲</p>
+    <p id="noResults" hidden class="text-center text-gray-400 dark:text-gray-500 py-10">Nic nenalezeno 🥲</p>
   </main>
 
   <!-- Kdo dočetl až sem, zaslouží si nápovědu:  iddqd  -->
@@ -215,7 +227,7 @@ def generate(restaurants, timestamp):
     <p class="text-sm pt-1">Polední menu u Holandské: <a href="https://jidlo.ivomartisek.cz" class="font-semibold text-saffron hover:underline">Tácek 🍽️</a></p>
   </footer>
 
-  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet.markercluster/1.5.3/leaflet.markercluster.js"></script>
   <script>
     {THEME_JS}
@@ -295,7 +307,7 @@ def generate(restaurants, timestamp):
 
     function applyFilters() {{
       const shown = _pass(_fold((search.value || '').trim()));
-      document.getElementById('noResults').style.display = shown ? 'none' : '';
+      document.getElementById('noResults').hidden = shown > 0;
     }}
 
     function syncChips() {{
@@ -304,6 +316,7 @@ def generate(restaurants, timestamp):
         const on = (f === '') ? active.size === 0 : active.has(f);
         c.classList.toggle('chip-on', on);
         c.classList.toggle('chip-off', !on);
+        c.setAttribute('aria-pressed', on ? 'true' : 'false');
       }});
     }}
 

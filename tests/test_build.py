@@ -106,3 +106,32 @@ def test_easter_egg_does_not_add_chips(built):
     restaurants, html = built
     facets = set(re.findall(r'data-facet="([^"]*)"', html))
     assert facets == _expected_facets(restaurants), facets
+
+
+def test_head_metadata(built):
+    """Favicon, náhled pro sdílení a rozměry hera proti poskočení layoutu."""
+    _, html_out = built
+    for token in ('rel="icon"', 'og:image', 'og:title', 'og:url',
+                  'twitter:card', 'width="1760" height="576"', 'decoding="async"'):
+        assert token in html_out, token
+
+
+def test_accessibility_hooks(built):
+    """Ovládací prvky musí být popsané pro odečítače."""
+    _, html_out = built
+    assert 'aria-label="Přepnout světlý a tmavý motiv"' in html_out
+    assert 'role="region"' in html_out
+    # Každý filtrační chip nese stav, včetně "Nejblíž u mě".
+    chips = re.findall(r'<button[^>]*class="chip[^"]*"[^>]*>', html_out)
+    assert chips, 'no chips found'
+    for c in chips:
+        assert 'type="button"' in c, c
+    facet_chips = [c for c in chips if 'data-facet=' in c]
+    for c in facet_chips:
+        assert 'aria-pressed=' in c, c
+
+
+def test_no_unpkg(built):
+    """Všechno z cdnjs, ať nevisíme na dvou CDN."""
+    _, html_out = built
+    assert 'unpkg.com' not in html_out
